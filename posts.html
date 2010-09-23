@@ -1,0 +1,15 @@
+---
+layout: default
+title:  amardaxini
+---
+<h3>Amar Daxini posts</h3>
+<div class="posts">
+    {% for post in site.posts limit:10 %}
+    <div class="entry">
+        <div class="entrytitlebg">
+            <h3 id="post-2" class="entrytitle"><a href="{{ post.url }}">{{ post.title }}</a></h3>
+            <span>{{ post.date | date: "%Y-%m-%d" }}</span>
+        </div>
+    </div>
+    {% endfor %}
+</div>

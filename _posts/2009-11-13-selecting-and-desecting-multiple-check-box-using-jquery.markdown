@@ -4,6 +4,7 @@ layout: default
 title: Select/Deselect Multiple CheckBox Using Jquery
 wordpress_url: http://railstech.com/?p=53
 ---
+{% include post-nav.textile %}
 <h1 class="page-title">Select/Deselect Multiple CheckBox Using Jquery</h1>
 <span class="author">Author :- Amar Daxini </span>
 <br />
@@ -61,4 +62,3 @@ In this setting checked attribute true/false alternatively by clicking on
 select/deselect for alternate removing and adding class
 not_checked depending upon that we are setting true and false
 
- <br />

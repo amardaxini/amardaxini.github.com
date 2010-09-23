@@ -4,6 +4,7 @@ layout: default
 title: "Dynamically updating selectlist using Jquery and Ajax "
 wordpress_url: http://railstech.com/?p=58
 ---
+{% include post-nav.textile %}
 <h1 class="page-title">{{ page.title }}</h1>
 <span class="author">Author :-Amar Daxini </span>
 <br />
@@ -68,3 +69,4 @@ on processing state id which we have pass as state_id
 {% endhighlight %}
 I have updated source code
 <a href="http://github.com/amardaxini/Ajax-Demo">http://github.com/amardaxini/Ajax-Demo</a>
+

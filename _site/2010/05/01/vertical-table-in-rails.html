@@ -1,30 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="/stylesheets/reset.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/grid.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/syntax.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+
+    <title>Vertical table in rails - Amar Daxini blog</title>
+
+</head>
+<body>
+<div class="container_16 every-thing">
+    <div class="header">
+        <div class="grid_16">
+            <div class="login-bar-left"><h1>Amar Daxini</h1></div>
+        </div>
+    </div>
+
+    <div class="main-nav">
+        <ul>
+             <li><a title="Home" href="/">Home</a></li>
+            <li><a title="Blog" href="/posts.html">Blog</a></li>
+            <li><a title="About" href="/about.html">About</a></li>
+        </ul>
+    </div>
+
+    <div id="wrapper">
+        <div id="content" class="grid_12">
+            <div class='grid_16' id='page-navigation'>
+    <div class='grid_8'>
+        <div class='left'>
+            
+            <a href='/2010/02/10/static-pages-in-rails.html' title='Previous Post:
+Static pages in rails'>&laquo; Static pages in rails</a>
+            
+        </div>
+    </div>
+
+    <div class='grid_8'>
+        <div class='right'>
+            
+            <a href='/2010/08/18/amazon-simple-queing-service-sqs-ruby.html' title='next Post:
+Amazon Simple Queing Service (SQS) + Ruby'>Amazon Simple Queing Service (SQS) + Ruby &raquo; </a>
+            
+        </div>
+    </div>
+
+</div><h1 class='page-title'>Vertical table in rails</h1><span class='author'>Author :- Amar Daxini </span><br /><hr />
 <p>In this article i have just taken a short example describing <strong>vertical table</strong>,and its implementation using rails.</p>
 
 <p>When table has no fixed column it has dynamic fields .data is not stored on separate column but <strong>data stores in vertical fashion</strong>.</p>
 
 <p>For implementing vertical table table has mainly <strong>2 columns key and value </strong>pair<strong>.key</strong> is like database<strong> column </strong>name and <strong>value</strong> contains actual <strong>data</strong>.</p>
-
+<br />
 <p>Lets take an e.g</p>
 
 <p>Consider website in which it contains various products and its comparison ,searching and many more features.product can be mobile,car etc.Product has many items.item may be nokia 6600,nokia n72 etc.</p>
 
 <p>Here our aim is not compare aur search items.Here our main aim is how vertical table concept is applied.Suppose we have to build only single product comparison site then each product has it&#8217;s own attributes that can be easily build with adding column for each product.</p>
 
-<p>we are developing generic site(multiple product).so there is no fixed attributes,each product has it&#8217;s own attributes either we create different model for each product or we can proceed with vertical table concept.</p>
-<img class='size-full alignnone' title='Vertical table' src='/wp-content/uploads/2010/05/model1.jpeg' alt='Vertical table' /><ul>
+<p>we are developing generic site like multiple product,so there is no fixed attributes,each product has it&#8217;s own attributes either we create different model for each product or we can proceed with vertical table concept.</p>
+<img class='size-full alignnone' title='Vertical table' src='/images/posts/model.jpeg' alt='Vertical table' /><ul>
 	<li>Product has many Product Attributes.</li>
 	<li>Product has many Items.</li>
 	<li>Item has many Item Attributes.</li>
 	<li>Item Attribute belongs to Product Attribute.</li>
-</ul><strong>Product Attribute</strong><strong>name</strong><strong>option_type</strong><strong>option</strong>
-<p>Item has only name field which is optional.</p>
-<strong>Item attribute</strong><strong>name</strong><strong>value</strong><strong>item_id</strong>
-<p>It is used where table has<strong> dynamic fields</strong>,and it only concern with data.</p>
+</ul>
+<p><strong>Product Attribute mainly requires 3 fields</strong></p>
+
+<p><strong>name :</strong> which is used for key in vertical table i.e column name</p>
+<br />
+<p><strong>option_type :</strong> which is used for viewing different form of data when item is created like text box, drop down,checkbox,multi option</p>
+<br />
+<p><strong>option :</strong> which contain option if its drop down or multi option i.e serialize.</p>
+<br />
+<p><strong>Item has only name field which is optional</strong></p>
+<br />
+<p><strong>Item attribute mainly required 3 fields</strong></p>
+<br />
+<p><strong>name :</strong> key name or column name</p>
+<br />
+<p><strong>value :</strong> actual value</p>
+<br />
+<p><strong>item_id :</strong> foreign key of item</p>
+
+<p>It is used where table has <strong>dynamic fields</strong> , and it only concern with data.</p>
 
 <p>Here <strong>data</strong> grows <strong>vertically</strong>.</p>
-
+<br />
 <p>It has mainly key ,value pair.</p>
 
 <p>Source code of above example is hosted on github <a href='http://github.com/amardaxini/vertical_table_demo'>http://github.com/amardaxini/vertical_table_demo</a></p>
 
 <p>For More info about vertical table you can visit <a href='http://weblogs.foxite.com/andykramek/archive/2009/05/03/8369.aspx'>http://weblogs.foxite.com/andykramek/archive/2009/05/03/8369.aspx</a></p>
+        </div>
+        <div class="grid_4">
+            <div id="github-badge"></div>
+            <script type="text/javascript" charset="utf-8">
+                GITHUB_USERNAME="amardaxini";
+                GITHUB_LIST_LENGTH=10;
+                GITHUB_HEAD="h2"; // e.g. change to "h2" for wordpress sidebars
+            </script>
+            <script src="http://drnic.github.com/github-badges/dist/github-badge-launcher.js" type="text/javascript"></script>
+            <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+
+        </div>
+
+        <div class="clear"></div>
+        <div class="push"></div>
+
+        <div class="clear"></div>
+    </div>
+
+    <div class="clear"></div>
+</div>
+<div class="clear"></div>
+<div  class="container_16">
+    <div id="footer">
+        <p class="copytight">&copy; 2010 <a href="http://raistech.com">Amar Daxini</a></p>
+
+
+    </div>
+</div>
+</body>
+</html>

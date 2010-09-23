@@ -5,6 +5,7 @@
     <link href="/stylesheets/grid.css" media="screen" rel="stylesheet" type="text/css" />
     <link href="/stylesheets/syntax.css" media="screen" rel="stylesheet" type="text/css" />
     <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+
     <title>Dynamically updating selectlist using Jquery and Ajax  - Amar Daxini blog</title>
 
 </head>
@@ -18,14 +19,34 @@
 
     <div class="main-nav">
         <ul>
+             <li><a title="Home" href="/">Home</a></li>
             <li><a title="Blog" href="/posts.html">Blog</a></li>
-            <li><a title="About" href="/aboutme.html">About</a></li>
+            <li><a title="About" href="/about.html">About</a></li>
         </ul>
     </div>
 
     <div id="wrapper">
         <div id="content" class="grid_12">
-            <h1 class='page-title'>Dynamically updating selectlist using Jquery and Ajax </h1><span class='author'>Author :-Amar Daxini </span><br /><hr />
+            <div class='grid_16' id='page-navigation'>
+    <div class='grid_8'>
+        <div class='left'>
+            
+            <a href='/2009/11/13/selecting-and-desecting-multiple-check-box-using-jquery.html' title='Previous Post:
+Select/Deselect Multiple CheckBox Using Jquery'>&laquo; Select/Deselect Multiple CheckBox Using Jquery</a>
+            
+        </div>
+    </div>
+
+    <div class='grid_8'>
+        <div class='right'>
+            
+            <a href='/2010/01/19/generate-pdf-using-rails-and-flying-saucer.html' title='next Post:
+Generate PDF Using Rails and Flying Saucer'>Generate PDF Using Rails and Flying Saucer &raquo; </a>
+            
+        </div>
+    </div>
+
+</div><h1 class='page-title'>Dynamically updating selectlist using Jquery and Ajax </h1><span class='author'>Author :-Amar Daxini </span><br /><hr />
 <p>In many web site we have seen that on selecting country, state or city list is updated.In this article i am showing how to update children select list on changing parent list. To do this i am using jquery and ruby on rails.although it will works for almost all languages For this article, I am updating city list on changing states. So one state has many cities,and city belongs to state. <br /></p>
 <div class='highlight'><pre><span class='nt'>&lt;html&gt;</span>
  <span class='nt'>&lt;head&gt;</span>
@@ -76,7 +97,15 @@
 <p>I have updated source code <a href='http://github.com/amardaxini/Ajax-Demo'>http://github.com/amardaxini/Ajax-Demo</a></p>
         </div>
         <div class="grid_4">
-            SIDEBAR TEMPLATE
+            <div id="github-badge"></div>
+            <script type="text/javascript" charset="utf-8">
+                GITHUB_USERNAME="amardaxini";
+                GITHUB_LIST_LENGTH=10;
+                GITHUB_HEAD="h2"; // e.g. change to "h2" for wordpress sidebars
+            </script>
+            <script src="http://drnic.github.com/github-badges/dist/github-badge-launcher.js" type="text/javascript"></script>
+            <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+
         </div>
 
         <div class="clear"></div>

@@ -21,3 +21,5 @@ maruku:
 
 rdiscount:
   extensions: []
+
+paginate: 3 

@@ -4,6 +4,7 @@ layout: default
 title: Static pages in rails
 wordpress_url: http://railstech.com/?p=89
 ---
+{% include post-nav.textile %}
 <h1 class="page-title">{{ page.title }}</h1>
 <span class="author">Author :- Amar Daxini </span>
 <br />
@@ -98,4 +99,4 @@ Url may be
 
 <strong><a href="http://railstech.com">http://railstech.com/page/faq.html</a> </strong>
 
-<br />
+

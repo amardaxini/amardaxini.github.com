@@ -2,12 +2,18 @@
 layout: default
 title:  amardaxini
 ---
-<h3>Amar Daxini posts</h3>
+
+        
 <div class="posts">
-    {% for post in site.posts limit:10 %}
+    {% for post in site.posts limit %}
+
+    
     <div class="entry">
-        <h3 id="post-2" class="entrytitle"><a href="{{ post.url }}">{{ post.title }}</a></h3>
-        <span>{{ post.date | date: "%Y-%m-%d" }}</span>
+        <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+          
+           <!--{{ post.content | truncatewords: 30  }}-->
+        <em>Posted on {{ post.date | date_to_long_string }}.</em>
     </div>
     {% endfor %}
 </div>
+

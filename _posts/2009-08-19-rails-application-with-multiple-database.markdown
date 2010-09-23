@@ -4,6 +4,8 @@ layout: default
 title: Multiple database in rails
 wordpress_url: http://railstech.com/?p=13
 ---
+{% include post-nav.textile %}
+
 <h1 class="page-title">{{ page.title }}</h1>
 <span class="author">Author :- Amar Daxini </span>
 <br />
@@ -89,3 +91,5 @@ end
  {% endhighlight %}
 <br />
 Now rails application is ready with multiple database.
+
+

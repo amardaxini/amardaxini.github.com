@@ -5,6 +5,7 @@
     <link href="/stylesheets/grid.css" media="screen" rel="stylesheet" type="text/css" />
     <link href="/stylesheets/syntax.css" media="screen" rel="stylesheet" type="text/css" />
     <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+
     <title>Generate PDF Using Rails and Flying Saucer - Amar Daxini blog</title>
 
 </head>
@@ -18,14 +19,34 @@
 
     <div class="main-nav">
         <ul>
+             <li><a title="Home" href="/">Home</a></li>
             <li><a title="Blog" href="/posts.html">Blog</a></li>
-            <li><a title="About" href="/aboutme.html">About</a></li>
+            <li><a title="About" href="/about.html">About</a></li>
         </ul>
     </div>
 
     <div id="wrapper">
         <div id="content" class="grid_12">
-            <h1 class='page-title'>Generate PDF Using Rails and Flying Saucer</h1><span class='author'>Author :- Amar Daxini </span><br /><hr /><h2>Rails Pdf Plugin act_as_flying_saucer</h2>
+            <div class='grid_16' id='page-navigation'>
+    <div class='grid_8'>
+        <div class='left'>
+            
+            <a href='/2009/11/26/dynamically-udating-select-list-using-jquery-and-ajax.html' title='Previous Post:
+Dynamically updating selectlist using Jquery and Ajax '>&laquo; Dynamically updating selectlist using Jquery and Ajax </a>
+            
+        </div>
+    </div>
+
+    <div class='grid_8'>
+        <div class='right'>
+            
+            <a href='/2010/02/10/static-pages-in-rails.html' title='next Post:
+Static pages in rails'>Static pages in rails &raquo; </a>
+            
+        </div>
+    </div>
+
+</div><h1 class='page-title'>Generate PDF Using Rails and Flying Saucer</h1><span class='author'>Author :- Amar Daxini </span><br /><hr /><h2>Rails Pdf Plugin act_as_flying_saucer</h2>
 <p>There are various ways to generate pdf documents in any language.In Rails we can use prawn library ,HtmlDoc,PrinceXml and many other library,using their api we can generate pdf document.Basically the primary goal is converting HTML web pages to PDF Document,without much changing existing CSS and HTML.</p>
 <br />
 <p>Using the<a href='https://xhtmlrenderer.dev.java.net/' target='_blank'> Flying Saucer Project</a> we can achieve this.we can convert HTML + CSS to PDF documents without much changing HTML and CSS. It also support CSS 2 and many properties of CSS 3 for printing Header,Footer,Page Number,Paginated Tables and many more.This Project is built on Java so Java is required on system.</p>
@@ -80,10 +101,17 @@
 <p>Now You are ready to Generate PDF. Hurray!!!!!!!!!</p>
 <br />
 <p>How to generate Header, Footer,Page Number and Automation Of HTML Validation will be discussed in next post.</p>
-<br />
         </div>
         <div class="grid_4">
-            SIDEBAR TEMPLATE
+            <div id="github-badge"></div>
+            <script type="text/javascript" charset="utf-8">
+                GITHUB_USERNAME="amardaxini";
+                GITHUB_LIST_LENGTH=10;
+                GITHUB_HEAD="h2"; // e.g. change to "h2" for wordpress sidebars
+            </script>
+            <script src="http://drnic.github.com/github-badges/dist/github-badge-launcher.js" type="text/javascript"></script>
+            <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+
         </div>
 
         <div class="clear"></div>

@@ -4,6 +4,8 @@ layout: default
 title: Generate PDF Using Rails and Flying Saucer
 wordpress_url: http://railstech.com/?p=73
 ---
+{% include post-nav.textile %}
+
 <h1 class="page-title">{{ page.title }}</h1>
 <span class="author">Author :- Amar Daxini </span>
 <br />
@@ -103,4 +105,4 @@ Now You are ready to Generate PDF. Hurray!!!!!!!!!
 
 How to generate Header, Footer,Page Number and Automation Of HTML Validation will be discussed in next post.
 
-<br />
+

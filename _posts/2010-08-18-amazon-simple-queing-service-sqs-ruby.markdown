@@ -4,6 +4,7 @@ layout: default
 title: Amazon Simple Queing Service (SQS) + Ruby
 wordpress_url: http://railstech.com/?p=230
 ---
+{% include post-nav.textile %}
 <h1 class="page-title">{{ page.title }}</h1>
 <span class="author">Author :- Virendra Negi </span>
 <br />
@@ -133,4 +134,4 @@ If you send a message to the queue don't assume it to appear instantaneously in 
 
 Thank you
 
-<br />
+

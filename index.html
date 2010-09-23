@@ -3,8 +3,78 @@ layout: default
 title: Amar Daxini
 ---
 
+<h1>Projects</h1>
+
+<h2 class="project-title"><a href="http://github.com/amardaxini/rchart" class="project-title">1. Rchart:- Chartig Library</a></h2>
+<div class="project-description">
+    Rchart is ruby port of the slick pChart charting library. <br />
+    Some of images are listed below which is developed using rchart.
+    <div class="project-github-url">Github:- <a href="http://github.com/amardaxini/rchart">rchart</a></div>
+</div>
+<img src="/images/rchart-1" alt="Rchart-1">
+<br /><br />
+<img src="/images/rchart-2" alt="Rchart-2">
+<br /><br />
+<img src="/images/rchart-3" alt="Rchart-3">
+<br /><br />
+<img src="/images/rchart-4" alt="Rchart-4">
+<br /><br />
+<h4>More examples of <a href="http://github.com/amardaxini/rchart_examples">http://github.com/amardaxini/rchart_examples</a></h4>
+
+<h2 class="project-title"><a href="http:/github.com/amardaxini/acts_as_flying_saucer" class="project-title">2. acts_as_flying_saucer:- PDF Generation using Xhtml/CSS</a></h2>
+<div class="project-description">
+    <b>acts_as_flying_saucer </b> is a Ruby On Rails plugin that allows to save rendered views as pdf documents using the Flying Saucer java library.
+    More info refer <a href="http://amardaxini.github.com/2010/01/19/generate-pdf-using-rails-and-flying-saucer.html">Pdf Generation Using Flying saucer </a>
+    Or <a href="http://railstech.com/?s=flying+saucer">Refer</a>
+    <div class="project-github-url">Github:- <a href="http:/github.com/amardaxini/acts_as_flying_saucer">acts_as_flying_saucer</a></div>
+</div>
+
+<h2 class="project-title"><a href="http:/github.com/amardaxini/convert_office" class="project-title">3. convert_office:- Convert open office format to another open office format</a></h2>
+<div class="project-description">
+    It is a ruby Wrapper of <strong>jodconverter</strong> Which is used to convert office format to another office format.<br />
+    It requires Open Office and java
+    <div class="project-github-url">Github:- <a href="http:/github.com/amardaxini/convert_office">convert_office</a></div>
+</div>
+
+<h2 class="project-title"><a href="http:/github.com/amardaxini/nailgun" class="project-title">4. nailgun:- Ruby wrapper of nailgun and it's client.</a></h2>
+<div class="project-description">
+   <b> Nailgun </b> is server that preloads JVM so no need to load JVM on each request.
+    Nailgun is a ruby wrapper of nailgun server and it's command.
+    <br />
+    Nailgun improves performance of standalone java application.<br />
+    acts_as_flying saucer and convert_office both plugin has nailgun support.
+    <div class="project-github-url">Github:- <a href="http:/github.com/amardaxini/nailgun">nailgun</a></div>
+</div>
+<h2 class="project-title"><a href="http:/github.com/amardaxini/pasco" class="project-title">5. pasco:- Read IE histories by passing IE history file i.e .dat</a></h2>
+<div class="project-description">
+    Pasco is a gem that reads ie histories on providing ie history file i.e *.dat.
+
+    {% highlight ruby %}Pasco.get_history(path of ie history file) {% endhighlight %}
+
+    It will return an array of object that contains url,modified_time,access_time,file_name,directory,http_header
+    <div class="project-github-url">Github:- <a href="http:/github.com/amardaxini/pasco">pasco</a></div>
+</div>
+<h2 class="project-title"><a href="http:/github.com/amardaxini/safari_plist" class="project-title">6. safari_plist:- Read safari histories by passing safari *.plist file</a></h2>
+<div class="project-description">
+    safari_plist is a gem that reads safari histories on providing safari *.plist file. <br />
+    It requires plutil binary. 
+    {% highlight ruby %}SafariPlist.get_history(*.plist,[plutil_path])  {% endhighlight %}
+    It returns array of object containing url,acces_time,visit_count 
+    <div class="project-github-url">Github:- <a href="http:/github.com/amardaxini/safari_plist">safari_plist</a></div>
+</div>
+<br /><br />
+<h1>Blog Posts</h1>
+
+<br />
 {% for post in site.posts limit:5 %}
-<h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
-{{ post.content }}
-<em>Posted on {{ post.date | date_to_long_string }}.</em>
+<div class="entry">
+    <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+     {{ post.content.excerpt | textilize }}
+    <em>Posted on {{ post.date | date_to_long_string }}.</em>
+</div>
+
 {% endfor %}
+
+<br />
+
+        

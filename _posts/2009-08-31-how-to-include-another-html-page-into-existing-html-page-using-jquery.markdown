@@ -4,6 +4,9 @@ layout: default
 title: How to include another html page into existing html page using jquery
 wordpress_url: http://railstech.com/?p=30
 ---
+
+{% include post-nav.textile %}
+<div class="clear">&nbsp;</div> 
 <h1 class="page-title">{{ page.title }}</h1>
 <span class="author">Author :- Amar Daxini </span>
 <br />
@@ -29,3 +32,4 @@ Example is as shown below.
 </html>
 {% endhighlight %}
 <br />
+

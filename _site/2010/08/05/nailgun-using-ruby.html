@@ -1,0 +1,36 @@
+<p>In <a href='http://railstech.com/?p=188' title='How to improve performance of java using nailgun server' target='_blank'>previous article</a> we have seen that how to start <strong>nailgun server</strong>,and use of nailgun in shortly.</p>
+
+<p>Now in<a href='http://railstech.com/?p=188'> </a><a href='http://railstech.com/?p=212' title='Nailgun using ruby railstech.com'>this article </a>how to use nailgun using ruby application which directly/indirectly use java library or java application. You can start with <strong>nailgun</strong> manually as shown previous article and configure <strong>ng</strong> as per need.Or you can install nailgun plugin from <a href='http://github.com/amardaxini/nailgun' title='http://github.com/amardaxini/nailgun' target='_blank'>github</a>. <!--more--></p>
+
+<p><span>code lang=&#8221;ruby&#8221;</span> ruby script/plugin install git://github.com/amardaxini/nailgun.git <span>/code</span></p>
+
+<p>After installing plugin run rake command <strong>.
+</strong></p>
+
+<p><span>code lang=&#8221;ruby&#8221;</span> rake nailgun <span>/code</span></p>
+
+<p>By default <strong>nailgun start </strong>on <strong>localhost</strong> with port no is <strong>2113</strong>.We can customise this options by adding following text to <strong>config/initializers/nailgun_config.rb </strong>file.</p>
+
+<p><span>code lang=&#8221;ruby&#8221;</span> Nailgun::NailgunConfig.options = { :java_bin =&#62; path to java, :server_address =&#62;&#34;Server Address&#34;, :port_no=&#62;&#34;Port no&#34; } <span>/code</span></p>
+
+<p>After configuration now we can st<strong>art nailgun server </strong>using following command</p>
+
+<p><span>code lang=&#8221;ruby&#8221;</span> ruby script/nailgun start <span>/code</span></p>
+
+<p>It will start nailgun server on specified address and port. To <strong>add</strong> any <strong>class path</strong> using following command.</p>
+
+<p><span>code lang=&#8221;ruby&#8221;</span> Nailgun::NgCommand.ng_cp(absolute jar path/absolute class path) <span>/code</span></p>
+
+<p>To <strong>add alias</strong> of class name using following command.</p>
+
+<p><span>code lang=&#8221;ruby&#8221;</span></p>
+
+<p>Nailgun::NgCommand.ng_alias(alias name,class name)</p>
+
+<p><span>/code</span></p>
+
+<p>To <strong>stop nailgun server</strong></p>
+
+<p><span>code lang=&#8221;ruby&#8221;</span> ruby script/nailgun stop <span>/code</span></p>
+
+<p>I hope this will helps to start with nailgun by installing simply <a href='http://github.com/amardaxini/nailgun' title='Nailgun plugin amar daxini,railstech.com' target='_blank'>nailgun plugin</a>. More you can read about <a href='http://railstech.com/?p=188' title='Nailgun Basics' target='_blank'>nailgun</a>.</p>

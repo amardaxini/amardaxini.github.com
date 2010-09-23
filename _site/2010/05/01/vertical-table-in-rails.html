@@ -1,0 +1,30 @@
+<p>In this article i have just taken a short example describing <strong>vertical table</strong>,and its implementation using rails.</p>
+
+<p>When table has no fixed column it has dynamic fields .data is not stored on separate column but <strong>data stores in vertical fashion</strong>.</p>
+
+<p>For implementing vertical table table has mainly <strong>2 columns key and value </strong>pair<strong>.key</strong> is like database<strong> column </strong>name and <strong>value</strong> contains actual <strong>data</strong>.</p>
+
+<p>Lets take an e.g</p>
+
+<p>Consider website in which it contains various products and its comparison ,searching and many more features.product can be mobile,car etc.Product has many items.item may be nokia 6600,nokia n72 etc.</p>
+
+<p>Here our aim is not compare aur search items.Here our main aim is how vertical table concept is applied.Suppose we have to build only single product comparison site then each product has it&#8217;s own attributes that can be easily build with adding column for each product.</p>
+
+<p>we are developing generic site(multiple product).so there is no fixed attributes,each product has it&#8217;s own attributes either we create different model for each product or we can proceed with vertical table concept.</p>
+<img class='size-full alignnone' title='Vertical table' src='/wp-content/uploads/2010/05/model1.jpeg' alt='Vertical table' /><ul>
+	<li>Product has many Product Attributes.</li>
+	<li>Product has many Items.</li>
+	<li>Item has many Item Attributes.</li>
+	<li>Item Attribute belongs to Product Attribute.</li>
+</ul><strong>Product Attribute</strong><strong>name</strong><strong>option_type</strong><strong>option</strong>
+<p>Item has only name field which is optional.</p>
+<strong>Item attribute</strong><strong>name</strong><strong>value</strong><strong>item_id</strong>
+<p>It is used where table has<strong> dynamic fields</strong>,and it only concern with data.</p>
+
+<p>Here <strong>data</strong> grows <strong>vertically</strong>.</p>
+
+<p>It has mainly key ,value pair.</p>
+
+<p>Source code of above example is hosted on github <a href='http://github.com/amardaxini/vertical_table_demo'>http://github.com/amardaxini/vertical_table_demo</a></p>
+
+<p>For More info about vertical table you can visit <a href='http://weblogs.foxite.com/andykramek/archive/2009/05/03/8369.aspx'>http://weblogs.foxite.com/andykramek/archive/2009/05/03/8369.aspx</a></p>

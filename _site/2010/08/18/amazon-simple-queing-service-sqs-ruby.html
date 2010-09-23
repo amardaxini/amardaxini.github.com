@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="/stylesheets/reset.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/grid.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/syntax.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+    <title>Amazon Simple Queing Service (SQS) + Ruby - Amar Daxini blog</title>
+
+</head>
+<body>
+<div class="container_16 every-thing">
+    <div class="header">
+        <div class="grid_16">
+            <div class="login-bar-left"><h1>Amar Daxini</h1></div>
+        </div>
+    </div>
+
+    <div class="main-nav">
+        <ul>
+            <li><a title="Blog" href="/posts.html">Blog</a></li>
+            <li><a title="About" href="/aboutme.html">About</a></li>
+        </ul>
+    </div>
+
+    <div id="wrapper">
+        <div id="content" class="grid_12">
+            <h1 class='page-title'>Amazon Simple Queing Service (SQS) + Ruby</h1><span class='author'>Author :- Virendra Negi </span><br /><hr />
+<p>Amazon SQS is a distributed queue messaging service. The idea of SQS is to remove the direct associations between producer and consumer and act as mediator between them. <br /> Consider that you have a large application like websites monitoring which involve many stages like <ul>
+	<li>Downloading a website</li>
+	<li>Processing the downloaded website</li>
+	<li>Generating report of the above processing</li>
+</ul> So instead of clubbing the above three one can just split them on their specific need(based on the work they do) with each doing their respective task and on completion notify the other about it completion. <br /></p>
+
+<p>The traditional approach (called as <a href='http://en.wikipedia.org/wiki/Clientserver_model' title='Client-Server railstech' target='_blank'>Client-Server</a> architecture) is to send the notification using a simple <a href='http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol' title='HTTP railstech' target='_blank'>HTTP</a> ,<a href='http://en.wikipedia.org/wiki/Representational_State_Transfer' title='REST railstech' target='_blank'>REST</a> , <a href='http://en.wikipedia.org/wiki/SOAP' title='SOAP railstech' target='_blank'>SOAP</a> etc request. But it too has some disadvantage as it require extra care and precision to handle all possible response e.g Time-out,Server down etc.</p>
+
+<p>One can save this time and effort my using SQS.</p>
+
+<p>e.g Instead of sending the direct request to Server one can use to SQS to interact with Server/Client an can eventually cut down some of drawback of traditional architecture.</p>
+
+<p>Setting up Amazon SQS in <a href='http://www.ruby-lang.org/en/' title='Ruby railstech' target='_blank'>Ruby</a>: There are various library available for using Amazon SQS in Ruby (e.g <a href='http://github.com/rightscale/right_aws' title='right_aws SQS railstech' target='_blank'>right_aws</a>, <a href='http://github.com/qoobaa/sqs' title='SQS gem railstech' target='_blank'>sqs</a>)</p>
+<strong>Pre-requitise:</strong><ul>
+	<li>aws-access-key-id</li>
+	<li>aws-secret-access-key</li>
+	<li>ruby-library(<a href='http://github.com/rightscale/right_aws' title='right_aws  railstech.com' target='_blank'>right_aws</a> or <a href='http://github.com/qoobaa/sqs' title='SQS gem railstech' target='_blank'>sqs</a> gem)
+both of which is provide by the Amazon (or you can ask for incase) during the process of account-registration</li>
+</ul>
+<p>In your <strong>irb</strong> console</p>
+<div class='highlight'><pre><span class='nb'>require</span> <span class='s2'>&quot;rubygems&quot;</span>
+
+<span class='nb'>require</span> <span class='s2'>&quot;right_aws&quot;</span>
+
+<span class='n'>aws_access_key_id</span> <span class='o'>=</span> <span class='s2'>&quot;Your access key id&quot;</span>
+
+<span class='n'>aws_secret_access_key</span> <span class='o'>=</span> <span class='s2'>&quot;Your secret access Key&quot;</span>
+
+<span class='n'>sqs</span> <span class='o'>=</span> <span class='no'>RightAws</span><span class='o'>::</span><span class='no'>SqsGen2</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span><span class='n'>aws_access_key_id</span><span class='p'>,</span><span class='n'>aws_secret_access_key</span><span class='p'>)</span>
+</pre>
+</div>
+<p>This basically initialize the sqs object for you to work on. <br /> One can create a new queue just by a single method.</p>
+<div class='highlight'><pre> <span class='n'>queue</span><span class='p'>(</span><span class='n'>queue_name</span><span class='p'>,</span> <span class='n'>create</span><span class='o'>=</span><span class='kp'>true</span><span class='p'>,</span> <span class='n'>visibility</span><span class='o'>=</span><span class='kp'>nil</span><span class='p'>)</span> 
+</pre>
+</div>
+<p>carefully look at parameter supplied.</p>
+<blockquote>
+<em>
+queue_name => name of queue.
+
+create => true (create a queue if it does not exist (optional)).
+
+visibility => set visibility (which make the message reappear after a specified time if not delete from queue).
+</em>
+</blockquote><br />
+<p>One key point about visibility is that one can&#8217;t set visibility more than 7200 sec for a queue or a message .But you can set so from <a href='http://www.rightscale.com/' title='RightScale railstech' target='_blank'>RightScale</a> (<strong>Cloud Computing management Platform</strong>).</p>
+
+<p>e.g</p>
+<div class='highlight'><pre><span class='n'>my_queue</span> <span class='o'>=</span> <span class='n'>queue</span><span class='p'>(</span><span class='s1'>&#39;queue_1&#39;</span><span class='p'>)</span>
+</pre>
+</div>
+<p>just look at few other methods.</p>
+
+<p>1 <strong>send_message</strong> or <strong>push</strong> :- Send message to the specified queue.</p>
+<div class='highlight'><pre> <span class='n'>my_queue</span><span class='o'>.</span><span class='n'>send_message</span> <span class='s2'>&quot;This is my first message&quot;</span>
+</pre>
+</div>
+<p>2 <strong>receive</strong> or <strong>pop</strong> :- Receive message from the specified queue.</p>
+<div class='highlight'><pre> <span class='n'>message_received</span> <span class='o'>=</span> <span class='n'>my_queue</span><span class='o'>.</span><span class='n'>receive</span>
+
+<span class='nb'>puts</span> <span class='n'>message_received</span><span class='o'>.</span><span class='n'>body</span>
+<span class='o'>=&gt;</span><span class='p'>;</span> <span class='s2'>&quot;This is my first message&quot;</span><span class='p'>;</span>
+</pre>
+</div><br />
+<p>3 <strong>receive_messages</strong> : - There is also a method called receive_messages to receive an array of messages but it never returned me more than one message so if it work for you it fine then syntax is like this</p>
+<div class='highlight'><pre> <span class='n'>receive_messages</span><span class='p'>(</span><span class='n'>number_of_message</span><span class='o'>=</span><span class='mi'>1</span><span class='p'>,</span><span class='n'>visibility</span><span class='o'>=</span><span class='kp'>nil</span><span class='p'>)</span>
+
+ <span class='n'>my_queue</span><span class='o'>.</span><span class='n'>receive_messages</span><span class='p'>(</span><span class='mi'>2</span><span class='p'>,</span><span class='mi'>60</span><span class='p'>)</span> <span class='o'>=&gt;</span> <span class='k'>return</span> <span class='ow'>and</span> <span class='n'>array</span> <span class='n'>of</span> <span class='n'>messages</span>
+</pre>
+</div><br />
+<p>4 <strong>delete </strong>: - Delete a message or a queue</p>
+<div class='highlight'><pre> <span class='n'>my_queue</span><span class='o'>.</span><span class='n'>delete</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;delete the my_queue for SQS&quot;</span>
+
+ <span class='n'>message_received</span><span class='o'>.</span><span class='n'>delete</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;delete the message from the intended queue&quot;</span>
+</pre>
+</div><br />
+<p>5 <strong>size</strong> :- Specify the no of message in?the queue</p>
+<div class='highlight'><pre> <span class='n'>my_queue</span><span class='o'>.</span><span class='n'>size</span> <span class='o'>=&gt;</span> <span class='mi'>4</span> <span class='c1'>#&quot;4&quot; message in my_queue</span>
+</pre>
+</div><br />
+<p>6 <strong>name</strong> :- Specify name of the queue</p>
+<div class='highlight'><pre> <span class='n'>my_queue</span><span class='o'>.</span><span class='n'>name</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;queue_1&quot;</span> <span class='c1'>#Name of the queue</span>
+</pre>
+</div><br />
+<p>Note There is delay lag in all request and response sent or received to or from SQS server don&#8217;t assume to work it instantaneous approximately of around 45 sec -1 minute or it can be more.</p>
+<em>e.g </em>
+<p>If you send a message to the queue don&#8217;t assume it to appear instantaneously in the queue <br /> <strong>Pricing Model </strong> =&gt; $0.10 per 100,000 requests.</p>
+
+<p>Message Size =&gt; 64KB</p>
+<br /><em>For more information on Pricing and message size click <a href='http://aws.amazon.com/about-aws/whats-new/2010/07/01/amazon-sqs-introduces-free-tier-and-adds-support-for-larger-messages-and-longer-retention/' title='AMAZON SQS railstech' target='_blank'>here</a>.</em>
+<p>Thank you</p>
+<br />
+        </div>
+        <div class="grid_4">
+            SIDEBAR TEMPLATE
+        </div>
+
+        <div class="clear"></div>
+        <div class="push"></div>
+
+        <div class="clear"></div>
+    </div>
+
+    <div class="clear"></div>
+</div>
+<div class="clear"></div>
+<div  class="container_16">
+    <div id="footer">
+        <p class="copytight">&copy; 2010 <a href="http://raistech.com">Amar Daxini</a></p>
+
+
+    </div>
+</div>
+</body>
+</html>

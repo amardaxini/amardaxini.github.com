@@ -1,0 +1,52 @@
+<p>In previous<a href='http://railstech.com/?p=73' title='article'> </a><a href='http://railstech.com/?p=73' title='Pdf Flying Saucer railstech.com'>article</a> we have seen that how pdf is generated  using act_as_flying_saucer plugin.</p>
+
+<p>Following code snippets is used for generating pdf with bookmark .</p>
+
+<p><span>code lang=&#8221;html&#8221;</span></p>
+
+<p>&#60;html&#62; &#60;head&#62;</p>
+
+<pre><code>&amp;lt;bookmarks&amp;gt;
+  &amp;lt;bookmark &amp;lt;strong&amp;gt;name=&amp;quot;Section 1&amp;quot; href=&amp;quot;#section_1&amp;quot;&amp;lt;/strong&amp;gt;&amp;gt;
+    &amp;lt;bookmark name=&amp;quot;Section 1.1&amp;quot; href=&amp;quot;#section_11&amp;quot;&amp;gt;&amp;lt;/bookmark&amp;gt;
+    &amp;lt;bookmark name=&amp;quot;Section 1.2&amp;quot; href=&amp;quot;#section_12&amp;quot;&amp;gt;&amp;lt;/bookmark&amp;gt;
+  &amp;lt;/bookmark&amp;gt;
+  &amp;lt;bookmark name=&amp;quot;Section 2&amp;quot; href=&amp;quot;#section_2&amp;quot;&amp;gt;&amp;lt;/bookmark&amp;gt;
+  &amp;lt;bookmark name=&amp;quot;Section 2&amp;quot; href=&amp;quot;#section_3&amp;quot;&amp;gt;&amp;lt;/bookmark&amp;gt;
+&amp;lt;/bookmarks&amp;gt;</code></pre>
+
+<p>&#60;/head&#62;</p>
+
+<p>&#60;body&#62;</p>
+
+<pre><code>&amp;lt;div style=&amp;quot;page-break-before: always;&amp;quot;&amp;gt;
+  &amp;lt;a &amp;lt;strong&amp;gt;name=&amp;quot;section_1&amp;quot;&amp;lt;/strong&amp;gt;&amp;gt;Section 1&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div style=&amp;quot;page-break-before: always;&amp;quot;&amp;gt;
+  &amp;lt;a name=&amp;quot;section_11&amp;quot;&amp;gt;Section 1.1&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div style=&amp;quot;page-break-before: always;&amp;quot;&amp;gt;
+  &amp;lt;a name=&amp;quot;section_12&amp;quot;&amp;gt;Section 1.1.2&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div style=&amp;quot;page-break-before: always;&amp;quot;&amp;gt;
+   &amp;lt;a name=&amp;quot;section_2&amp;quot;&amp;gt;Section 2&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div style=&amp;quot;page-break-before: always;&amp;quot;&amp;gt;
+   &amp;lt;a name=&amp;quot;section_3&amp;quot;&amp;gt;Section 3&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;</code></pre>
+
+<p>&#60;/body&#62;</p>
+
+<p>&#60;/html&#62;</p>
+
+<p><span>/code</span></p>
+
+<p>&#60;<strong>bookmark</strong> name=&#8221;section 1&#8221; <strong> href</strong>=&#8221;#section_1&#8221;&#62; tag is used to generate bookmark. which contains name attribute for displaying name of bookmark. href attribute is used for navigation purpose.</p>
+
+<p>&#60;bookmark&#62; tag can be nested so it can be used for generating nested bookmark &#60;bookmark&#62; tag is wrapper with &#60;bookmarks&#62; tag. This tag placed in html header.</p>
+
+<p>Now in html body whichever anchor tag has name attribute with value as same as bookmark href value on that position user is navigated.</p>
+
+<p>Mainly two tag is used which is displayed below.</p>
+
+<p>&#60;<strong>bookmarks</strong>&#62; &#60;<strong>bookmark</strong> name=&#8221;Name Of Bookmark&#8221;  <strong>href="#bookmark1</strong>&#8221;&#62;&#60; /<strong>bookmark</strong>&#62; &#60;/<strong>bookmarks</strong>&#62; &#60;a<strong> name="bookmark1"</strong>&#62;Text&#60;/a&#62;</p>

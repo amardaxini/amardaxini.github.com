@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="/stylesheets/reset.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/grid.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/syntax.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+    <title>Amar Daxini - Amar Daxini blog</title>
+
+</head>
+<body>
+<div class="container_16 every-thing">
+    <div class="header">
+        <div class="grid_16">
+            <div class="login-bar-left"><h1>Amar Daxini</h1></div>
+        </div>
+    </div>
+
+    <div class="main-nav">
+        <ul>
+            <li><a title="Blog" href="/posts.html">Blog</a></li>
+            <li><a title="About" href="/aboutme.html">About</a></li>
+        </ul>
+    </div>
+
+    <div id="wrapper">
+        <div id="content" class="grid_12">
+            
+
+<h2><a href="/2010/08/18/amazon-simple-queing-service-sqs-ruby.html">Amazon Simple Queing Service (SQS) + Ruby</a></h2>
+<h1 class='page-title'>Amazon Simple Queing Service (SQS) + Ruby</h1><span class='author'>Author :- Virendra Negi </span><br /><hr />
+<p>Amazon SQS is a distributed queue messaging service. The idea of SQS is to remove the direct associations between producer and consumer and act as mediator between them. <br /> Consider that you have a large application like websites monitoring which involve many stages like <ul>
+	<li>Downloading a website</li>
+	<li>Processing the downloaded website</li>
+	<li>Generating report of the above processing</li>
+</ul> So instead of clubbing the above three one can just split them on their specific need(based on the work they do) with each doing their respective task and on completion notify the other about it completion. <br /></p>
+
+<p>The traditional approach (called as <a href='http://en.wikipedia.org/wiki/Clientserver_model' title='Client-Server railstech' target='_blank'>Client-Server</a> architecture) is to send the notification using a simple <a href='http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol' title='HTTP railstech' target='_blank'>HTTP</a> ,<a href='http://en.wikipedia.org/wiki/Representational_State_Transfer' title='REST railstech' target='_blank'>REST</a> , <a href='http://en.wikipedia.org/wiki/SOAP' title='SOAP railstech' target='_blank'>SOAP</a> etc request. But it too has some disadvantage as it require extra care and precision to handle all possible response e.g Time-out,Server down etc.</p>
+
+<p>One can save this time and effort my using SQS.</p>
+
+<p>e.g Instead of sending the direct request to Server one can use to SQS to interact with Server/Client an can eventually cut down some of drawback of traditional architecture.</p>
+
+<p>Setting up Amazon SQS in <a href='http://www.ruby-lang.org/en/' title='Ruby railstech' target='_blank'>Ruby</a>: There are various library available for using Amazon SQS in Ruby (e.g <a href='http://github.com/rightscale/right_aws' title='right_aws SQS railstech' target='_blank'>right_aws</a>, <a href='http://github.com/qoobaa/sqs' title='SQS gem railstech' target='_blank'>sqs</a>)</p>
+<strong>Pre-requitise:</strong><ul>
+	<li>aws-access-key-id</li>
+	<li>aws-secret-access-key</li>
+	<li>ruby-library(<a href='http://github.com/rightscale/right_aws' title='right_aws  railstech.com' target='_blank'>right_aws</a> or <a href='http://github.com/qoobaa/sqs' title='SQS gem railstech' target='_blank'>sqs</a> gem)
+both of which is provide by the Amazon (or you can ask for incase) during the process of account-registration</li>
+</ul>
+<p>In your <strong>irb</strong> console</p>
+<div class='highlight'><pre><span class='nb'>require</span> <span class='s2'>&quot;rubygems&quot;</span>
+
+<span class='nb'>require</span> <span class='s2'>&quot;right_aws&quot;</span>
+
+<span class='n'>aws_access_key_id</span> <span class='o'>=</span> <span class='s2'>&quot;Your access key id&quot;</span>
+
+<span class='n'>aws_secret_access_key</span> <span class='o'>=</span> <span class='s2'>&quot;Your secret access Key&quot;</span>
+
+<span class='n'>sqs</span> <span class='o'>=</span> <span class='no'>RightAws</span><span class='o'>::</span><span class='no'>SqsGen2</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span><span class='n'>aws_access_key_id</span><span class='p'>,</span><span class='n'>aws_secret_access_key</span><span class='p'>)</span>
+</pre>
+</div>
+<p>This basically initialize the sqs object for you to work on. <br /> One can create a new queue just by a single method.</p>
+<div class='highlight'><pre> <span class='n'>queue</span><span class='p'>(</span><span class='n'>queue_name</span><span class='p'>,</span> <span class='n'>create</span><span class='o'>=</span><span class='kp'>true</span><span class='p'>,</span> <span class='n'>visibility</span><span class='o'>=</span><span class='kp'>nil</span><span class='p'>)</span> 
+</pre>
+</div>
+<p>carefully look at parameter supplied.</p>
+<blockquote>
+<em>
+queue_name => name of queue.
+
+create => true (create a queue if it does not exist (optional)).
+
+visibility => set visibility (which make the message reappear after a specified time if not delete from queue).
+</em>
+</blockquote><br />
+<p>One key point about visibility is that one can&#8217;t set visibility more than 7200 sec for a queue or a message .But you can set so from <a href='http://www.rightscale.com/' title='RightScale railstech' target='_blank'>RightScale</a> (<strong>Cloud Computing management Platform</strong>).</p>
+
+<p>e.g</p>
+<div class='highlight'><pre><span class='n'>my_queue</span> <span class='o'>=</span> <span class='n'>queue</span><span class='p'>(</span><span class='s1'>&#39;queue_1&#39;</span><span class='p'>)</span>
+</pre>
+</div>
+<p>just look at few other methods.</p>
+
+<p>1 <strong>send_message</strong> or <strong>push</strong> :- Send message to the specified queue.</p>
+<div class='highlight'><pre> <span class='n'>my_queue</span><span class='o'>.</span><span class='n'>send_message</span> <span class='s2'>&quot;This is my first message&quot;</span>
+</pre>
+</div>
+<p>2 <strong>receive</strong> or <strong>pop</strong> :- Receive message from the specified queue.</p>
+<div class='highlight'><pre> <span class='n'>message_received</span> <span class='o'>=</span> <span class='n'>my_queue</span><span class='o'>.</span><span class='n'>receive</span>
+
+<span class='nb'>puts</span> <span class='n'>message_received</span><span class='o'>.</span><span class='n'>body</span>
+<span class='o'>=&gt;</span><span class='p'>;</span> <span class='s2'>&quot;This is my first message&quot;</span><span class='p'>;</span>
+</pre>
+</div><br />
+<p>3 <strong>receive_messages</strong> : - There is also a method called receive_messages to receive an array of messages but it never returned me more than one message so if it work for you it fine then syntax is like this</p>
+<div class='highlight'><pre> <span class='n'>receive_messages</span><span class='p'>(</span><span class='n'>number_of_message</span><span class='o'>=</span><span class='mi'>1</span><span class='p'>,</span><span class='n'>visibility</span><span class='o'>=</span><span class='kp'>nil</span><span class='p'>)</span>
+
+ <span class='n'>my_queue</span><span class='o'>.</span><span class='n'>receive_messages</span><span class='p'>(</span><span class='mi'>2</span><span class='p'>,</span><span class='mi'>60</span><span class='p'>)</span> <span class='o'>=&gt;</span> <span class='k'>return</span> <span class='ow'>and</span> <span class='n'>array</span> <span class='n'>of</span> <span class='n'>messages</span>
+</pre>
+</div><br />
+<p>4 <strong>delete </strong>: - Delete a message or a queue</p>
+<div class='highlight'><pre> <span class='n'>my_queue</span><span class='o'>.</span><span class='n'>delete</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;delete the my_queue for SQS&quot;</span>
+
+ <span class='n'>message_received</span><span class='o'>.</span><span class='n'>delete</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;delete the message from the intended queue&quot;</span>
+</pre>
+</div><br />
+<p>5 <strong>size</strong> :- Specify the no of message in?the queue</p>
+<div class='highlight'><pre> <span class='n'>my_queue</span><span class='o'>.</span><span class='n'>size</span> <span class='o'>=&gt;</span> <span class='mi'>4</span> <span class='c1'>#&quot;4&quot; message in my_queue</span>
+</pre>
+</div><br />
+<p>6 <strong>name</strong> :- Specify name of the queue</p>
+<div class='highlight'><pre> <span class='n'>my_queue</span><span class='o'>.</span><span class='n'>name</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;queue_1&quot;</span> <span class='c1'>#Name of the queue</span>
+</pre>
+</div><br />
+<p>Note There is delay lag in all request and response sent or received to or from SQS server don&#8217;t assume to work it instantaneous approximately of around 45 sec -1 minute or it can be more.</p>
+<em>e.g </em>
+<p>If you send a message to the queue don&#8217;t assume it to appear instantaneously in the queue <br /> <strong>Pricing Model </strong> =&gt; $0.10 per 100,000 requests.</p>
+
+<p>Message Size =&gt; 64KB</p>
+<br /><em>For more information on Pricing and message size click <a href='http://aws.amazon.com/about-aws/whats-new/2010/07/01/amazon-sqs-introduces-free-tier-and-adds-support-for-larger-messages-and-longer-retention/' title='AMAZON SQS railstech' target='_blank'>here</a>.</em>
+<p>Thank you</p>
+<br />
+<em>Posted on 18 August 2010.</em>
+
+<h2><a href="/2010/02/10/static-pages-in-rails.html">Static pages in rails</a></h2>
+<h1 class='page-title'>Static pages in rails</h1><span class='author'>Author :- Amar Daxini </span><br /><hr /><h2>Static site using rails</h2>
+<p>As we know rails is mainly used for <strong>dynamic website</strong>.we can also display <strong>static web pages</strong> or we can deploy full <strong>static website</strong> using <strong>rails</strong>. The following code can help us to display static pages.</p>
+<br /><h3>Step 1:-Create Rails project</h3><div class='highlight'><pre><span class='n'>rails</span> <span class='n'>static_site</span>
+</pre>
+</div><br /><h3>Step 2:-Generate StaticPage Controller</h3><div class='highlight'><pre>  <span class='n'>ruby</span> <span class='n'>script</span><span class='o'>/</span><span class='n'>generate</span> <span class='n'>controller</span> <span class='n'>static_pages</span> <span class='n'>page</span>
+</pre>
+</div><br /><h3>Step 3:- Create StaticPage Class in Model</h3><div class='highlight'><pre> <span class='k'>class</span> <span class='nc'>StaticPage</span>
+   <span class='no'>Formats</span> <span class='o'>=</span> <span class='p'>{</span>
+       <span class='s2'>&quot;html&quot;</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;text/html&quot;</span><span class='p'>,</span>
+       <span class='s2'>&quot;png&quot;</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;image/png&quot;</span><span class='p'>,</span>
+       <span class='s2'>&quot;jpg&quot;</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;image/jpg&quot;</span>
+     <span class='p'>}</span>
+ <span class='k'>end</span>
+</pre>
+</div><br /><h3>Step 4:- Add following line in routes.rb</h3><div class='highlight'><pre><span class='n'>map</span><span class='o'>.</span><span class='n'>page</span> <span class='s2'>&quot;page/:filename.:format&quot;</span><span class='p'>,</span> <span class='ss'>:controller</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;static_pages&#39;</span><span class='p'>,</span> <span class='ss'>:action</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;page&#39;</span>
+</pre>
+</div><br />
+<p>Here we are passing filename as parameter which is static file name.</p>
+
+<p>This will generate <strong>url</strong> as<strong> http://sitename/page/static_filename.html</strong></p>
+<br /><h3>Step 5:- Now add following line into static_pages controller</h3><div class='highlight'><pre><span class='k'>def</span> <span class='nf'>page</span>
+ <span class='n'>send_file</span>
+ <span class='s2'>&quot;</span><span class='si'>#{</span><span class='no'>Rails</span><span class='o'>.</span><span class='n'>root</span><span class='si'>}</span><span class='s2'>/app/views/static_pages/</span><span class='si'>#{</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:filename</span><span class='o'>]</span><span class='si'>}</span><span class='s2'>.</span><span class='si'>#{</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:format</span><span class='o'>]</span><span class='si'>}</span><span class='s2'>&quot;</span><span class='p'>,</span><span class='ss'>:disposition</span> <span class='o'>=&gt;</span><span class='s1'>&#39;inline&#39;</span><span class='p'>,</span><span class='ss'>:type</span> <span class='o'>=&gt;</span> <span class='no'>StaticPage</span><span class='o'>::</span><span class='no'>Formats</span><span class='o'>[</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:format</span><span class='o'>]]</span>
+ <span class='k'>end</span>
+</pre>
+</div><br /><h3>Step 6:- All the static pages place in RAILS_ROOT/app/views/static_pages/ folder</h3><br /><h3>Step 7 :- Start server and Type url as shown below.</h3><div class='highlight'><pre><span class='n'>ruby</span> <span class='n'>script</span><span class='o'>/</span><span class='n'>server</span>
+</pre>
+</div><br />
+<p>Url may be</p>
+<strong><a href='http://railstech.com/?page_id=2'> http://railstech.com/page/contactus.html</a></strong><br /><strong><a href='http://railstech.com'>http://railstech.com/page/faq.html</a> </strong><br />
+<em>Posted on 10 February 2010.</em>
+
+<h2><a href="/2010/01/19/generate-pdf-using-rails-and-flying-saucer.html">Generate PDF Using Rails and Flying Saucer</a></h2>
+<h1 class='page-title'>Generate PDF Using Rails and Flying Saucer</h1><span class='author'>Author :- Amar Daxini </span><br /><hr /><h2>Rails Pdf Plugin act_as_flying_saucer</h2>
+<p>There are various ways to generate pdf documents in any language.In Rails we can use prawn library ,HtmlDoc,PrinceXml and many other library,using their api we can generate pdf document.Basically the primary goal is converting HTML web pages to PDF Document,without much changing existing CSS and HTML.</p>
+<br />
+<p>Using the<a href='https://xhtmlrenderer.dev.java.net/' target='_blank'> Flying Saucer Project</a> we can achieve this.we can convert HTML + CSS to PDF documents without much changing HTML and CSS. It also support CSS 2 and many properties of CSS 3 for printing Header,Footer,Page Number,Paginated Tables and many more.This Project is built on Java so Java is required on system.</p>
+<br />
+<p>Lets Start How to generate PDF Using Flying Saucer.</p>
+<br /><div class='highlight'><pre> <span class='n'>script</span><span class='o'>/</span><span class='n'>plugin</span> <span class='n'>install</span> <span class='n'>git</span><span class='ss'>:/</span><span class='o'>/</span><span class='n'>github</span><span class='o'>.</span><span class='n'>com</span><span class='o'>/</span><span class='n'>amardaxini</span><span class='o'>/</span><span class='n'>acts_as_flying_saucer</span><span class='o'>.</span><span class='n'>git</span>
+</pre>
+</div><br />
+<p>This Plugin forked From</p>
+<div class='highlight'><pre>http://github.com/dagi3d/acts_as_flying_saucer
+</pre>
+</div>
+<p>Which has older version of flying saucer project.</p>
+<br />
+<p>Next Step after installing plugin add <strong>flying_saucer.rb </strong> file at <strong>config/initializers</strong>.</p>
+<br /><div class='highlight'><pre><span class='no'>ActsAsFlyingSaucer</span><span class='o'>::</span><span class='no'>Config</span><span class='o'>.</span><span class='n'>options</span> <span class='o'>=</span> <span class='p'>{</span>
+<span class='ss'>:java_bin</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;/usr/bin/java&quot;</span><span class='p'>,</span>          <span class='c1'># java binary</span>
+<span class='ss'>:classpath_separator</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;:&#39;</span><span class='p'>,</span>           <span class='c1'># classpath separator. unixes system use &#39;:&#39; and windows &#39;;&#39;</span>
+<span class='ss'>:tmp_path</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;/tmp&quot;</span>                   <span class='c1'># path where temporary files will be stored</span>
+<span class='p'>}</span>
+</pre>
+</div>
+<p>After Setting Java path , classpath separator and tmp path now do following step.</p>
+<br /><div class='highlight'><pre><span class='k'>class</span> <span class='nc'>PdfController</span> <span class='o'>&lt;</span> <span class='no'>ActionController</span><span class='o'>::</span><span class='no'>Base</span>
+  <span class='n'>acts_as_flying_saucer</span>
+
+  <span class='k'>def</span> <span class='nf'>generate_pdf</span>
+    <span class='n'>render_pdf</span> <span class='ss'>:template</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;pdf/pdf_template&#39;</span>
+  <span class='k'>end</span>
+<span class='k'>end</span>
+  <span class='n'>render_pdf</span> <span class='ss'>:file</span><span class='o'>=&gt;</span><span class='s1'>&#39;pdf/generate_pdf.html.erb&#39;</span>
+  <span class='n'>render_pdf</span> <span class='ss'>:template</span><span class='o'>=&gt;</span><span class='s1'>&#39;pdf/generate_pdf.pdf.erb&#39;</span><span class='p'>,</span>
+             <span class='ss'>:send_file</span> <span class='o'>=&gt;</span> <span class='p'>{</span> <span class='ss'>:filename</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;pdfdoc.pdf&#39;</span> <span class='p'>}</span>
+</pre>
+</div><br />
+<p>Add act_as_flying_saucer to controller then render_pdf.</p>
+
+<p>There are various ways to render pdf using &#8221;<strong>template</strong>&#8221; or &#8221;<strong>file</strong>&#8221;,<strong>:send_file</strong> option use to send pdf file to client side.if we are using any <strong>external css</strong> file then this css shoulda have <strong>medi</strong>a option as<strong> 'print'</strong>.</p>
+<br /><div class='highlight'><pre><span class='o'>&lt;</span><span class='sx'>%= stylesheet_link_tag &#39;pdf&#39; ,:media=</span><span class='o'>&gt;</span><span class='s1'>&#39;print&#39;</span> <span class='o'>%&gt;</span>
+</pre>
+</div>
+<p>If pdf containing images which generate on the fly.so instead of using</p>
+<br /><div class='highlight'><pre><span class='o'>&lt;%=</span> <span class='n'>image_tag</span> <span class='o'>%&gt;</span>
+</pre>
+</div>
+<p>use</p>
+<div class='highlight'><pre> <span class='nt'>&lt;img</span> <span class='na'>src=</span><span class='s'>&quot; &quot;</span> <span class='nt'>&gt;</span>
+</pre>
+</div>
+<p>Before rendering PDF validate HTML,like whether all tags are close properly or not.otherwise it gives an parse error.</p>
+<br />
+<p>Now You are ready to Generate PDF. Hurray!!!!!!!!!</p>
+<br />
+<p>How to generate Header, Footer,Page Number and Automation Of HTML Validation will be discussed in next post.</p>
+<br />
+<em>Posted on 19 January 2010.</em>
+
+<h2><a href="/2009/11/26/dynamically-udating-select-list-using-jquery-and-ajax.html">Dynamically updating selectlist using Jquery and Ajax </a></h2>
+<h1 class='page-title'>Dynamically updating selectlist using Jquery and Ajax </h1><span class='author'>Author :-Amar Daxini </span><br /><hr />
+<p>In many web site we have seen that on selecting country, state or city list is updated.In this article i am showing how to update children select list on changing parent list. To do this i am using jquery and ruby on rails.although it will works for almost all languages For this article, I am updating city list on changing states. So one state has many cities,and city belongs to state. <br /></p>
+<div class='highlight'><pre><span class='nt'>&lt;html&gt;</span>
+ <span class='nt'>&lt;head&gt;</span>
+   <span class='nt'>&lt;script </span><span class='na'>type=</span><span class='s'>&quot;text/javascript&quot;</span> <span class='na'>src=</span><span class='s'>&quot;jquery.js&quot;</span><span class='nt'>&gt;&lt;/script&gt;</span>
+   <span class='nt'>&lt;script </span><span class='na'>type=</span><span class='s'>&quot;text/javascript&quot;</span><span class='nt'>&gt;</span>
+   <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;#states&quot;</span><span class='p'>).</span><span class='nx'>live</span><span class='p'>(</span><span class='s2'>&quot;change&quot;</span><span class='o'>,</span><span class='kd'>function</span><span class='p'>(){</span>
+     <span class='nx'>state_id</span> <span class='o'>=</span> <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;#states&quot;</span><span class='p'>).</span><span class='nx'>val</span><span class='p'>();</span>
+     <span class='nx'>$</span><span class='p'>.</span><span class='nx'>ajax</span><span class='p'>({</span>
+       <span class='nx'>type</span><span class='o'>:</span> <span class='s2'>&quot;GET&quot;</span><span class='o'>,</span>
+       <span class='nx'>url</span><span class='o'>:</span> <span class='s2'>&quot;/city_list.xxx&quot;</span><span class='o'>,</span>
+        <span class='c'>/*or any server side url which generate citylist for rails</span>
+<span class='c'>                 &quot;/states/city_list&quot;or&lt;%= city_list_states_path%&gt; */</span>
+      <span class='nx'>data</span><span class='o'>:</span> <span class='s2'>&quot;state_id=&quot;</span><span class='o'>+</span><span class='nx'>state_id</span><span class='o'>,</span>
+       <span class='c'>/*here we are passing state_id to server based on that on</span>
+<span class='c'>             he can find out  all the city related to that states */</span>
+     <span class='nx'>success</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span><span class='nx'>html</span><span class='p'>){</span>
+      <span class='c'>/*html content response of city_list.xxx */</span>
+     <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;#city_list&quot;</span><span class='p'>).</span><span class='nx'>html</span><span class='p'>(</span><span class='nx'>html</span><span class='p'>);</span>
+      <span class='p'>}</span>
+    <span class='p'>});</span>
+   <span class='p'>});</span>
+ <span class='nt'>&lt;/script&gt;</span>
+<span class='nt'>&lt;/head&gt;</span>
+<span class='nt'>&lt;body&gt;</span>
+ <span class='nt'>&lt;div</span> <span class='na'>id=</span><span class='s'>&quot;state_list&quot;</span><span class='nt'>&gt;</span>
+   <span class='nt'>&lt;select</span> <span class='na'>id=</span><span class='s'>&quot;states&quot;</span><span class='nt'>&gt;</span>
+     <span class='nt'>&lt;option&gt;</span>a<span class='nt'>&lt;/option&gt;</span>
+     <span class='nt'>&lt;option&gt;</span>b<span class='nt'>&lt;/option&gt;</span>
+   <span class='nt'>&lt;/select&gt;</span>
+ <span class='nt'>&lt;/div&gt;</span>
+ <span class='nt'>&lt;div</span> <span class='na'>id=</span><span class='s'>&quot;city_list&quot;</span><span class='nt'>&gt;</span>
+   <span class='nt'>&lt;select</span> <span class='na'>id=</span><span class='s'>&quot;cities&quot;</span><span class='nt'>&gt;</span>
+   <span class='nt'>&lt;option</span> <span class='na'>value=</span><span class='s'>&quot;1&quot;</span><span class='nt'>&gt;</span>aa<span class='nt'>&lt;/option&gt;</span>
+   <span class='nt'>&lt;option</span> <span class='na'>value=</span><span class='s'>&quot;2&quot;</span><span class='nt'>&gt;</span>aaa<span class='nt'>&lt;/option&gt;</span>
+ <span class='nt'>&lt;/select&gt;</span>
+ <span class='nt'>&lt;/div&gt;</span>
+ <span class='nt'>&lt;/body&gt;</span>
+<span class='nt'>&lt;/html&gt;</span>
+</pre>
+</div>
+<p>and city_list.xxx gives following html on processing state id which we have pass as state_id</p>
+<br /><div class='highlight'><pre><span class='nt'>&lt;select</span> <span class='na'>id=</span><span class='s'>&quot;cities&quot;</span><span class='nt'>&gt;</span>
+  <span class='nt'>&lt;option</span> <span class='na'>value=</span><span class='s'>&quot;3&quot;</span><span class='nt'>&gt;</span>bb<span class='nt'>&lt;/option&gt;</span>
+  <span class='nt'>&lt;option</span> <span class='na'>value=</span><span class='s'>&quot;4&quot;</span><span class='nt'>&gt;</span>bbb<span class='nt'>&lt;/option&gt;</span>
+<span class='nt'>&lt;/select&gt;</span>
+</pre>
+</div>
+<p>I have updated source code <a href='http://github.com/amardaxini/Ajax-Demo'>http://github.com/amardaxini/Ajax-Demo</a></p>
+<em>Posted on 26 November 2009.</em>
+
+<h2><a href="/2009/11/13/selecting-and-desecting-multiple-check-box-using-jquery.html">Select/Deselect Multiple CheckBox Using Jquery</a></h2>
+<h1 class='page-title'>Select/Deselect Multiple CheckBox Using Jquery</h1><span class='author'>Author :- Amar Daxini </span><br /><hr />
+<p>In many website we have seen that on checked or unchecked one box<br /> all the check box are checked or unchecked.<br /> Now in this article i am showing how to checked unchecked all the check box <br /></p>
+<br /><div class='highlight'><pre><span class='nt'>&lt;html&gt;</span>
+  <span class='nt'>&lt;head&gt;</span>
+    <span class='nt'>&lt;script </span><span class='na'>type=</span><span class='s'>&quot;text/javascript&quot;</span> <span class='na'>src=</span><span class='s'>&quot;jquery.js&quot;</span><span class='nt'>&gt;&lt;/script&gt;</span>
+    <span class='nt'>&lt;script </span><span class='na'>type=</span><span class='s'>&quot;text/javascript&quot;</span><span class='nt'>&gt;</span>
+     	<span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;#check_all&quot;</span><span class='p'>).</span><span class='nx'>live</span><span class='p'>(</span><span class='s2'>&quot;click&quot;</span><span class='o'>,</span><span class='kd'>function</span><span class='p'>(</span><span class='nx'>event</span><span class='p'>)</span>
+	    <span class='p'>{</span>
+		    <span class='k'>if</span><span class='p'>(</span><span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;#check_all&quot;</span><span class='p'>).</span><span class='nx'>hasClass</span><span class='p'>(</span><span class='s1'>&#39;not_checked&#39;</span><span class='p'>))</span>
+		    <span class='p'>{</span>
+			    <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;#check_all&quot;</span><span class='p'>).</span><span class='nx'>removeClass</span><span class='p'>(</span><span class='s1'>&#39;not_checked&#39;</span><span class='p'>);</span>
+			    <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;.check-box&quot;</span><span class='p'>).</span><span class='nx'>attr</span><span class='p'>(</span><span class='s1'>&#39;checked&#39;</span><span class='o'>,</span><span class='kc'>true</span><span class='p'>);</span>
+		    <span class='p'>}</span>
+		    <span class='k'>else</span>
+		    <span class='p'>{</span>
+			    <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;#check_all&quot;</span><span class='p'>).</span><span class='nx'>addClass</span><span class='p'>(</span><span class='s1'>&#39;not_checked&#39;</span><span class='p'>);</span>
+			    <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;.check-box&quot;</span><span class='p'>).</span><span class='nx'>attr</span><span class='p'>(</span><span class='s1'>&#39;checked&#39;</span><span class='o'>,</span><span class='kc'>false</span><span class='p'>);</span>
+		    <span class='p'>}</span>
+	  <span class='p'>});</span>
+    <span class='nt'>&lt;/script&gt;</span>
+  <span class='nt'>&lt;/head&gt;</span>
+  <span class='nt'>&lt;body&gt;</span>
+    <span class='nt'>&lt;table&gt;</span>
+      <span class='nt'>&lt;tr&gt;</span>
+        <span class='nt'>&lt;td&gt;</span>Select/Deselect<span class='nt'>&lt;/td&gt;</span>
+        <span class='nt'>&lt;td&gt;&lt;input</span> <span class='na'>type=</span><span class='s'>&quot;checkbox&quot;</span> <span class='na'>class=</span><span class='s'>&quot;check-box not_checked&quot;</span> <span class='na'>id=</span><span class='s'>&quot;check_all&quot;</span><span class='nt'>&gt;&lt;/td&gt;</span>
+      <span class='nt'>&lt;/tr&gt;</span>
+      <span class='nt'>&lt;tr&gt;</span>
+        <span class='nt'>&lt;td&gt;</span>First<span class='nt'>&lt;/td&gt;</span>
+        <span class='nt'>&lt;td&gt;&lt;input</span> <span class='na'>type=</span><span class='s'>&quot;checkbox&quot;</span> <span class='na'>class=</span><span class='s'>&quot;check-box&quot;</span> <span class='na'>id=</span><span class='s'>&quot;check_box2&quot;</span><span class='nt'>&gt;&lt;/td&gt;</span>
+      <span class='nt'>&lt;/tr&gt;</span>
+      <span class='nt'>&lt;tr&gt;</span>
+        <span class='nt'>&lt;td&gt;</span>Second<span class='nt'>&lt;/td&gt;</span>
+        <span class='nt'>&lt;td&gt;&lt;input</span> <span class='na'>type=</span><span class='s'>&quot;checkbox&quot;</span> <span class='na'>class=</span><span class='s'>&quot;check-box&quot;</span> <span class='na'>id=</span><span class='s'>&quot;check_box3&quot;</span><span class='nt'>&gt;&lt;/td&gt;</span>
+       <span class='nt'>&lt;/tr&gt;</span>
+       <span class='nt'>&lt;tr&gt;</span>
+         <span class='nt'>&lt;td&gt;</span>Third<span class='nt'>&lt;/td&gt;</span>
+         <span class='nt'>&lt;td&gt;&lt;input</span> <span class='na'>type=</span><span class='s'>&quot;checkbox&quot;</span> <span class='na'>class=</span><span class='s'>&quot;check-box&quot;</span> <span class='na'>id=</span><span class='s'>&quot;check_box4&quot;</span><span class='nt'>&gt;&lt;/td&gt;</span>
+      <span class='nt'>&lt;/tr&gt;</span>
+    <span class='nt'>&lt;/table&gt;</span>
+  <span class='nt'>&lt;/body&gt;</span>
+<span class='nt'>&lt;/html&gt;</span>
+</pre>
+</div><br />
+<p>In this setting checked attribute true/false alternatively by clicking on select/deselect for alternate removing and adding class not_checked depending upon that we are setting true and false</p>
+<br />
+<em>Posted on 13 November 2009.</em>
+
+
+        </div>
+        <div class="grid_4">
+            SIDEBAR TEMPLATE
+        </div>
+
+        <div class="clear"></div>
+        <div class="push"></div>
+
+        <div class="clear"></div>
+    </div>
+
+    <div class="clear"></div>
+</div>
+<div class="clear"></div>
+<div  class="container_16">
+    <div id="footer">
+        <p class="copytight">&copy; 2010 <a href="http://raistech.com">Amar Daxini</a></p>
+
+
+    </div>
+</div>
+</body>
+</html>

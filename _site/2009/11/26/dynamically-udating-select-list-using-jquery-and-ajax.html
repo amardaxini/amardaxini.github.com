@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="/stylesheets/reset.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/grid.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/syntax.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+    <title>Dynamically updating selectlist using Jquery and Ajax  - Amar Daxini blog</title>
+
+</head>
+<body>
+<div class="container_16 every-thing">
+    <div class="header">
+        <div class="grid_16">
+            <div class="login-bar-left"><h1>Amar Daxini</h1></div>
+        </div>
+    </div>
+
+    <div class="main-nav">
+        <ul>
+            <li><a title="Blog" href="/posts.html">Blog</a></li>
+            <li><a title="About" href="/aboutme.html">About</a></li>
+        </ul>
+    </div>
+
+    <div id="wrapper">
+        <div id="content" class="grid_12">
+            <h1 class='page-title'>Dynamically updating selectlist using Jquery and Ajax </h1><span class='author'>Author :-Amar Daxini </span><br /><hr />
+<p>In many web site we have seen that on selecting country, state or city list is updated.In this article i am showing how to update children select list on changing parent list. To do this i am using jquery and ruby on rails.although it will works for almost all languages For this article, I am updating city list on changing states. So one state has many cities,and city belongs to state. <br /></p>
+<div class='highlight'><pre><span class='nt'>&lt;html&gt;</span>
+ <span class='nt'>&lt;head&gt;</span>
+   <span class='nt'>&lt;script </span><span class='na'>type=</span><span class='s'>&quot;text/javascript&quot;</span> <span class='na'>src=</span><span class='s'>&quot;jquery.js&quot;</span><span class='nt'>&gt;&lt;/script&gt;</span>
+   <span class='nt'>&lt;script </span><span class='na'>type=</span><span class='s'>&quot;text/javascript&quot;</span><span class='nt'>&gt;</span>
+   <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;#states&quot;</span><span class='p'>).</span><span class='nx'>live</span><span class='p'>(</span><span class='s2'>&quot;change&quot;</span><span class='o'>,</span><span class='kd'>function</span><span class='p'>(){</span>
+     <span class='nx'>state_id</span> <span class='o'>=</span> <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;#states&quot;</span><span class='p'>).</span><span class='nx'>val</span><span class='p'>();</span>
+     <span class='nx'>$</span><span class='p'>.</span><span class='nx'>ajax</span><span class='p'>({</span>
+       <span class='nx'>type</span><span class='o'>:</span> <span class='s2'>&quot;GET&quot;</span><span class='o'>,</span>
+       <span class='nx'>url</span><span class='o'>:</span> <span class='s2'>&quot;/city_list.xxx&quot;</span><span class='o'>,</span>
+        <span class='c'>/*or any server side url which generate citylist for rails</span>
+<span class='c'>                 &quot;/states/city_list&quot;or&lt;%= city_list_states_path%&gt; */</span>
+      <span class='nx'>data</span><span class='o'>:</span> <span class='s2'>&quot;state_id=&quot;</span><span class='o'>+</span><span class='nx'>state_id</span><span class='o'>,</span>
+       <span class='c'>/*here we are passing state_id to server based on that on</span>
+<span class='c'>             he can find out  all the city related to that states */</span>
+     <span class='nx'>success</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span><span class='nx'>html</span><span class='p'>){</span>
+      <span class='c'>/*html content response of city_list.xxx */</span>
+     <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;#city_list&quot;</span><span class='p'>).</span><span class='nx'>html</span><span class='p'>(</span><span class='nx'>html</span><span class='p'>);</span>
+      <span class='p'>}</span>
+    <span class='p'>});</span>
+   <span class='p'>});</span>
+ <span class='nt'>&lt;/script&gt;</span>
+<span class='nt'>&lt;/head&gt;</span>
+<span class='nt'>&lt;body&gt;</span>
+ <span class='nt'>&lt;div</span> <span class='na'>id=</span><span class='s'>&quot;state_list&quot;</span><span class='nt'>&gt;</span>
+   <span class='nt'>&lt;select</span> <span class='na'>id=</span><span class='s'>&quot;states&quot;</span><span class='nt'>&gt;</span>
+     <span class='nt'>&lt;option&gt;</span>a<span class='nt'>&lt;/option&gt;</span>
+     <span class='nt'>&lt;option&gt;</span>b<span class='nt'>&lt;/option&gt;</span>
+   <span class='nt'>&lt;/select&gt;</span>
+ <span class='nt'>&lt;/div&gt;</span>
+ <span class='nt'>&lt;div</span> <span class='na'>id=</span><span class='s'>&quot;city_list&quot;</span><span class='nt'>&gt;</span>
+   <span class='nt'>&lt;select</span> <span class='na'>id=</span><span class='s'>&quot;cities&quot;</span><span class='nt'>&gt;</span>
+   <span class='nt'>&lt;option</span> <span class='na'>value=</span><span class='s'>&quot;1&quot;</span><span class='nt'>&gt;</span>aa<span class='nt'>&lt;/option&gt;</span>
+   <span class='nt'>&lt;option</span> <span class='na'>value=</span><span class='s'>&quot;2&quot;</span><span class='nt'>&gt;</span>aaa<span class='nt'>&lt;/option&gt;</span>
+ <span class='nt'>&lt;/select&gt;</span>
+ <span class='nt'>&lt;/div&gt;</span>
+ <span class='nt'>&lt;/body&gt;</span>
+<span class='nt'>&lt;/html&gt;</span>
+</pre>
+</div>
+<p>and city_list.xxx gives following html on processing state id which we have pass as state_id</p>
+<br /><div class='highlight'><pre><span class='nt'>&lt;select</span> <span class='na'>id=</span><span class='s'>&quot;cities&quot;</span><span class='nt'>&gt;</span>
+  <span class='nt'>&lt;option</span> <span class='na'>value=</span><span class='s'>&quot;3&quot;</span><span class='nt'>&gt;</span>bb<span class='nt'>&lt;/option&gt;</span>
+  <span class='nt'>&lt;option</span> <span class='na'>value=</span><span class='s'>&quot;4&quot;</span><span class='nt'>&gt;</span>bbb<span class='nt'>&lt;/option&gt;</span>
+<span class='nt'>&lt;/select&gt;</span>
+</pre>
+</div>
+<p>I have updated source code <a href='http://github.com/amardaxini/Ajax-Demo'>http://github.com/amardaxini/Ajax-Demo</a></p>
+        </div>
+        <div class="grid_4">
+            SIDEBAR TEMPLATE
+        </div>
+
+        <div class="clear"></div>
+        <div class="push"></div>
+
+        <div class="clear"></div>
+    </div>
+
+    <div class="clear"></div>
+</div>
+<div class="clear"></div>
+<div  class="container_16">
+    <div id="footer">
+        <p class="copytight">&copy; 2010 <a href="http://raistech.com">Amar Daxini</a></p>
+
+
+    </div>
+</div>
+</body>
+</html>

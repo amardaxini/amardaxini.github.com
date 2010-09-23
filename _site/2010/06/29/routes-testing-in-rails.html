@@ -1,0 +1,46 @@
+<p>Everyone is familiar with routes in rails been a Rails developer we add and edit config/routes.rb many time throughout our application.But let get it straight how many of us actually write test for routes that we define.I guess hardly anyone does I too used to avoid writing it until I found out how easy and fun it is to write route test. So let me show you</p>
+
+<p>A <strong>Routes Test</strong> has basically 3 parts <pre class='markdown-html-error' style='border: solid 3px red; background-color: pink'>REXML could not parse this XML/HTML: 
+&lt;ol&gt; 1. assert_generate</pre></p>
+
+<ol>
+<li>
+<p>assert_recognizes</p>
+</li>
+
+<li>
+<p>assert_routing&lt;/ol&gt;</p>
+</li>
+
+<li><strong>assert_generate.</strong>
+<p>Asserts that the options you provide can be used to generate the provided path. <strong>SYNTAX</strong> <span>code lang=&#8221;ruby&#8221;</span>assert_generates(expected_path, options, defaults={}, extras = {}, message=nil)<span>/code</span> Let see an example Suppose I have a routes &#8220;http://localhost:3000/users/new&#8221; so the assert_generate for the following path look like this. <span>code lang=&#8221;ruby&#8221;</span>assert_generate(&#34;/users/new&#34;,:controller =&#62; &#34;user&#34;,:action =&#62; &#34;new&#34;)<span>/code</span> This tell that the controller and action pair generate the provided path in this case(<strong>"/users/new"</strong>)</p>
+</li>
+</ol>
+
+<p>Now make it bit complex What about <strong>parameters</strong> passed in to the routes,well you can write test for that as well Here how e.g suppose above path look like this <strong>'http://localhost:3000/users/new?account=1'</strong> Now as you can see the there a additional parameter that been passed now so the test for the above path would look like <span>code lang=&#8221;ruby&#8221;</span>assert_generates(&#34;/users/new&#34;,, {}, )<span>/code</span> Now one might ask why the path isn&#8217;t written like this<strong> '/users/new?account=1' </strong>that because the <strong>'account_id=1'</strong> is passed as parameters and we all know one never get a path with parameter add to routes if we do rake routes. So to take care of that extra parameter one need to tell what extra(parameter) that will be passed,in this it is <strong>"account_id"</strong></p>
+
+<p>Now when you run the following test it run without any error and failure</p>
+
+<ol>
+<li><strong>assert_recognizes.</strong>
+<p>Basically it just the inverse of<strong> assert_generate</strong>.assert_recognizes asserts that <a href='http://rubyonrails.org/'>Rails</a> recognizes the route given by expected_options. <strong>SYNTAX</strong> <span>code lang=&#8221;ruby&#8221;</span>assert_recognizes(expected_options, path, extras={}, message=nil)<span>/code</span> e.g Let do assert_recognizes for the same path(<strong>/users/new?account=1</strong>) for which we did assert_generate. Here it is. <span>code lang=&#8221;ruby&#8221;</span>assert_recognizes(,&#34;/users/new&#34;,)<span>/code</span> Here again your are a specify the extra as<strong> 'account_id'</strong></p>
+</li>
+</ol>
+
+<p>Now see a trivial example</p>
+
+<p>http://localhost:3000/users/1 =&gt; :controller =&gt; &#8220;users&#8221;, :action =&gt; &#8220;show&#8221;</p>
+
+<p>http://localhost:3000/users/1 =&gt; :controller =&gt; &#8220;users&#8221;,:action =&gt; &#8220;destroy&#8221;</p>
+
+<p>so the <strong>assert_recognizes</strong> for the above two would look like this <span>code lang=&#8221;ruby&#8221;</span>assert_recognizes(,)<span>/code</span> <span>code lang=&#8221;ruby&#8221;</span>assert_recognizes(,)<span>/code</span> 3. <strong>assert_routing. </strong> assert_routing essentially combines <strong>"assert_recognizes</strong>&#8221; and <strong>"assert_generates"</strong> into one step. <strong>SYNTAX</strong> <span>code lang=&#8221;ruby&#8221;</span>assert_routing(path, options, defaults={}, extras={}, message=nil)<span>/code</span> <strong>assert_routing</strong> for the above path are as follow</p>
+
+<p>i. &#8220;http://localhost:3000/users/1?account_id=1&#8221; <span>code lang=&#8221;ruby&#8221;</span>assert_routing(&#8216;/users/new&#8217;, ,{},)<span>/code</span> ii. &#8220;http://localhost:3000/users/1&#8221; =&gt; Show action <span>code lang=&#8221;ruby&#8221;</span>assert_routing(&#8216;/users/1&#8217;,:controller =&#62; &#34;users&#34;,:action =&#62; &#34;show&#34;,:id =&#62;&#34;1&#34;)<span>/code</span> iii. &#8220;http://localhost:3000/users/1&#8221; =&gt; Destroy action with method =&gt; &#8216;delete&#8217; <span>code lang=&#8221;ruby&#8221;</span>assert_routing(, )<span>/code</span> You Can also try few console trick while writing the test. <span>code lang=&#8221;ruby&#8221;</span>$ script/console &#62;&#62; routes = ActionController::Routing::Routes&#60;/strong&#62;</p>
+
+<h1 id='_routesgenerate_controller__users__action__new'>&#62;&#62; routes.generate :controller =&#62; &#34;users&#34; , :action =&#62; &#34;new&#34;</h1>
+
+<h1 id='_routesgenerate_controller__users__action__edit_id__1'>&#62;&#62; routes.generate :controller =&#62; &#34;users&#34; , :action =&#62; &#34;edit&#34;, :id =&#62; &#34;1&#34;</h1>
+
+<h1 id='_routesrecognize_path_usersnew'>&#62;&#62; routes.recognize_path &#8216;/users/new&#8217;</h1>
+
+<h1 id='_routesrecognize_path_usersedit1'>&#62;&#62; routes.recognize_path &#8216;/users/edit/1&#8217;</h1>

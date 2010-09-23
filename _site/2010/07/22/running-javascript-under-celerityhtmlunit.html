@@ -1,0 +1,92 @@
+<p>Lately there have been too many people wanting to know how to execute Javascript in <a href='http://celerity.rubyforge.org/'>Celerity.</a> Let me show you how it done. First a quick note on <strong><a href='http://jruby.org/'>JRuby</a></strong> installation. Here are few useful links to install JRuby under <ol>
+  1. <a href='http://dermological.blogspot.com/2007/02/installing-jruby-on-ubuntu.html'>Linux(ubuntu)</a> should work for other linux packages as well.
+  2. <a href='http://www.iowaosum.com/install-jruby'>Windows.</a>
+</ol></p>
+
+<p>Just to confirm,kindly type <strong>jruby -v</strong> on <strong>terminal</strong> or <strong>cmd</strong> depending on OS you are using and you should get the version of jruby you are running.</p>
+
+<p>Mine output was <span>code lang=&#8221;ruby&#8221;</span> jruby -v jruby 1.4.0 (ruby 1.8.7 patchlevel 174) (2010-03-11 6586) (OpenJDK Client VM 1.6.0_0) <span>i386-java</span> <span>/code</span></p>
+
+<p>Now go ahead and just install <strong>celerity</strong> gem. More about celerity installation can be found <a href='http://celerity.rubyforge.org/'>here</a> also just quickly check whether the sample code work for you.If it work then your ready go and for those it don&#8217;t well you just need to tweak a bit.</p>
+
+<p>Ok enough of installation,now we start with running javascript under celerity. Here is my test HTML File &#8221;<strong>index.html</strong>.&#8221; <blockquote>
+<div id='_mcePaste'>
+<div id='_mcePaste'>&nbsp;&lt;html&gt;</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&lt;head&gt;</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&lt;script type="text/javascript"&gt;</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;function populateDropDown() {</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var select = document.getElementById('colors');</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var options = ['Ruby', 'JRuby', 'IronRuby', 'Rails'];</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var index;</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(index = 0; index &lt; options.length; index++) {</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var option = document.createElement('option');</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;option.appendChild(document.createTextNode(options[index]));</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;option.value = options[index];</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select.appendChild(option);</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&lt;/script&gt;</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&lt;script type="text/javascript"&gt;</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;function add_new_language() {</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var wrapper = document.getElementById('wrapper');</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var input = document.createElement('input');</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var br = document.createElement('br');</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input.setAttribute('type','text');</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wrapper.appendChild(br);</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wrapper.appendChild(input);</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&lt;/script&gt;</div>
+<div id='_mcePaste'>&nbsp;&lt;/head&gt;</div>
+<div id='_mcePaste'>&nbsp;&lt;body onload="populateDropDown()"&gt;</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&lt;h1&gt;Select Your Favourite Language&lt;/h1&gt;</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&lt;form&gt;</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&lt;select id="colors"&gt;</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/select&gt;   &lt;a href="#" onclick="add_new_language()" &gt;More Language&lt;/a&gt;</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&lt;br/&gt;</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&lt;span id="wrapper"&gt;</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/span&gt;</div>
+<div id='_mcePaste'>&nbsp;&nbsp;&lt;/form&gt;</div>
+<div id='_mcePaste'>&nbsp;&lt;/body&gt;</div>
+<div id='_mcePaste'>&lt;/html&gt;</div>
+</div></blockquote> Here my sample code in JRuby. <span>code lang=&#8221;ruby&#8221;</span> require &#34;rubygems&#34; require &#34;celerity&#34;</p>
+
+<p>browser = Celerity::Browser.new(:browser =&#62; :firefox) browser.goto(&#34;file:///home/guest/Desktop/index.html&#34;) <span>/code</span> Now basically one can run the javascript just by a simply calling the method <strong>fire_event</strong> on the html tag that has the associated event that you want to fire. &#160;e.g the anchor tag above has a <strong>onclick event</strong> associated with it. <span>code lang=&#8221;ruby&#8221;</span> browser.document.get_html_elements_by_tag_name(&#8217;a&#8217;).first.fire_event(&#8216;click&#8217;) <span>/code</span> Now modified the html content i.e (after javascript execution) can be obtain using <strong>"browser.xml".</strong></p>
+
+<p>Here mine output. <span>code lang=&#8221;ruby&#8221;</span> puts browser.xml <span>/code</span> <pre class='markdown-html-error' style='border: solid 3px red; background-color: pink'>REXML could not parse this XML/HTML: 
+&lt;blockquote&gt;
+&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&amp;gt;</pre></p>
+
+<p>&#60;html&#62; &#160;&#60;head&#62; &#160;&#160;&#60;script type=&#8221;text/javascript&#8221;&#62; &#160;&#160; //&#60;<span>CDATA<span>&#160;&#160;&#160;&#160; function populateDropDown() { &#160;&#160;&#160;&#160;&#160;&#160;&#160;var select = &#160;&#160;&#160;&#160;&#160;&#160;&#160;document.getElementById(&#8216;colors&#8217;); &#160;&#160;&#160;&#160;&#160;&#160;&#160;var options = <span>&#8216;Ruby&#8217;, &#8216;JRuby&#8217;, &#8216;IronRuby&#8217;, &#8216;Rails&#8217;</span>; &#160;&#160;&#160;&#160;&#160;&#160; var index; &#160;&#160;&#160;&#160;&#160;&#160;&#160;for(index = 0; index &#60; options.length; index++) { &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;var option = document.createElement(&#8216;option&#8217;); &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;option.appendChild(document.createTextNode(options<span>index</span>)); &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;option.value = options<span>index</span>; &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;select.appendChild(option); &#160;&#160;&#160;&#160;&#160;&#160;&#160;} &#160;&#160;&#160;&#160;&#160;} &#160;&#160;//</span></span>&#62; &#160;&#160;&#60;/script&#62;</p>
+
+<p>&#160;&#160;&#60;script type=&#8221;text/javascript&#8221;&#62; &#160;&#160; //&#60;<span>CDATA<span>&#160;&#160;&#160;&#160;&#160;function add_new_language() { &#160;&#160;&#160;&#160;&#160;&#160;&#160;var wrapper =document.getElementById(&#8216;wrapper&#8217;); &#160;&#160;&#160;&#160;&#160;&#160;&#160;var input = document.createElement(&#8216;input&#8217;); &#160;&#160;&#160;&#160;&#160;&#160;&#160;var br = document.createElement(&#8216;br&#8217;); &#160;&#160;&#160;&#160;&#160;&#160;&#160;input.setAttribute(&#8216;type&#8217;,&#8217;text&#8217;); &#160;&#160;&#160;&#160;&#160;&#160;&#160;wrapper.appendChild(br); &#160;&#160;&#160;&#160;&#160;&#160;&#160;wrapper.appendChild(input); &#160;&#160;&#160;&#160;&#160;} &#160;&#160; //</span></span>&#62; &#160;&#160;&#60;/script&#62; &#160;&#60;/head&#62;</p>
+
+<p>&#160;&#60;body onload=&#8221;populateDropDown()&#8221;&#62; &#160;&#160;&#60;h1&#62;Select Your Favourite Language&#60;/h1&#62;</p>
+
+<p>&#160;&#160;&#160;&#160;&#60;form&#62; &#160;&#160;&#160;&#160;&#160;&#160;&#60;select id=&#8221;colors&#8221;&#62; &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#60;option value=&#8221;Ruby&#8221; selected=&#8221;selected&#8221;&#62;Ruby&#60;/option&#62; &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#60;option value=&#8221;JRuby&#8221;&#62;JRuby&#60;/option&#62; &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#60;option value=&#8221;IronRuby&#8221;&#62;IronRuby&#60;/option&#62; &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#60;option value=&#8221;Rails&#8221;&#62;Rails&#60;/option&#62; &#160;&#160;&#160;&#160;&#160;&#160;&#60;/select&#62;</p>
+
+<p>&#160;&#160;&#160;&#160;&#160;&#160;&#60;a href=&#8221;#&#8221; onclick=&#8221;add_new_language()&#8221;&#160;&#62;More Language&#60;/a&#62; &#160;&#160;&#160;&#160;&#160;&#160;&#60;br/&#62; &#160;&#160;&#160;&#160;&#160;&#160;&#60;span id=&#8221;wrapper&#8221;&#62; &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#60;br/&#62; &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<strong>&lt;input type="text"/&gt;</strong> &#60;!&#8212; generated by javascipt &#8211;&#62; &#160;&#160;&#160;&#160;&#160;&#160;&#60;/span&#62; &#160;&#160;&#160;&#160;&#60;/form&#62; &#160;&#60;/body&#62; &#60;/html&#62;&lt;/blockquote&gt;</p>
+
+<p>Here how I made the whole flow generic.</p>
+
+<p><span>code lang=&#8221;ruby&#8221;</span></p>
+
+<h1 id='list_of_tag_that_has_event_handler'>List of Tag that has event Handler</h1>
+
+<p>TAGS = <span>&#8216;iframe&#8217; ,&#8217;img&#8217;, &#8216;frame&#8217;, &#8216;frameset&#8217;, &#8216;ilayer&#8217;, &#8216;input&#8217;, &#8216;layer&#8217;, &#8216;select&#8217;, &#8216;a&#8217;, &#8216;area&#8217;, &#8216;form&#8217;, &#8216;object&#8217;, &#8216;script&#8217;, &#8216;embed&#8217;, &#8216;applet&#8217;, &#8216;option&#8217;, &#8216;button&#8217;</span></p>
+
+<h1 id='defining_a_constant_with_list_of_event_hander'>defining a Constant with list of event_hander</h1>
+
+<p>EVENT_HANDLERS = <span>&#8216;onclick&#8217;,&#8217;onmouseover&#8217;,&#8217;onselect&#8217;,&#8217;onsubmit&#8217;</span></p>
+
+<h1 id='list_of_events_that_can_trigger_a_function'>List of events that can trigger a function</h1>
+
+<p>EVENTS = <span>&#8216;click&#8217;,&#8217;mouseover&#8217;,&#8217;select&#8217;,&#8217;submit&#8217;</span></p>
+
+<p>TAGS.each do |tag| browser.document.get_html_elements_by_tag_name(tag).each do |element| EVENT_HANDLERS.each_with_index do |event_handle,i| element.fire_event(EVENTS<span>i</span>) if element.hasAttribute(event_handle) end end end <span>/code</span> <strong>Note : - </strong> One didn&#8217;t need to fire_event for <strong>onload </strong> as the onload event is fired as soon as the page is load using <strong>browser.goto .</strong></p>
+
+<p>Other options available are : - <ol><a href='http://tenderlovemaking.com/category/computadora/johnson/'>Johnson</a> in Ruby 
+<a href='http://justaddwater.dk/2007/11/20/how-to-run-javascript-from-watir-scripts/'>Watir </a> in Ruby
+Selenium in JRuby
+</ol></p>
+
+<p>Thank You</p>

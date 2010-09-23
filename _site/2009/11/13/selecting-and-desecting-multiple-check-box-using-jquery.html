@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="/stylesheets/reset.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/grid.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/syntax.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+    <title>Select/Deselect Multiple CheckBox Using Jquery - Amar Daxini blog</title>
+
+</head>
+<body>
+<div class="container_16 every-thing">
+    <div class="header">
+        <div class="grid_16">
+            <div class="login-bar-left"><h1>Amar Daxini</h1></div>
+        </div>
+    </div>
+
+    <div class="main-nav">
+        <ul>
+            <li><a title="Blog" href="/posts.html">Blog</a></li>
+            <li><a title="About" href="/aboutme.html">About</a></li>
+        </ul>
+    </div>
+
+    <div id="wrapper">
+        <div id="content" class="grid_12">
+            <h1 class='page-title'>Select/Deselect Multiple CheckBox Using Jquery</h1><span class='author'>Author :- Amar Daxini </span><br /><hr />
+<p>In many website we have seen that on checked or unchecked one box<br /> all the check box are checked or unchecked.<br /> Now in this article i am showing how to checked unchecked all the check box <br /></p>
+<br /><div class='highlight'><pre><span class='nt'>&lt;html&gt;</span>
+  <span class='nt'>&lt;head&gt;</span>
+    <span class='nt'>&lt;script </span><span class='na'>type=</span><span class='s'>&quot;text/javascript&quot;</span> <span class='na'>src=</span><span class='s'>&quot;jquery.js&quot;</span><span class='nt'>&gt;&lt;/script&gt;</span>
+    <span class='nt'>&lt;script </span><span class='na'>type=</span><span class='s'>&quot;text/javascript&quot;</span><span class='nt'>&gt;</span>
+     	<span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;#check_all&quot;</span><span class='p'>).</span><span class='nx'>live</span><span class='p'>(</span><span class='s2'>&quot;click&quot;</span><span class='o'>,</span><span class='kd'>function</span><span class='p'>(</span><span class='nx'>event</span><span class='p'>)</span>
+	    <span class='p'>{</span>
+		    <span class='k'>if</span><span class='p'>(</span><span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;#check_all&quot;</span><span class='p'>).</span><span class='nx'>hasClass</span><span class='p'>(</span><span class='s1'>&#39;not_checked&#39;</span><span class='p'>))</span>
+		    <span class='p'>{</span>
+			    <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;#check_all&quot;</span><span class='p'>).</span><span class='nx'>removeClass</span><span class='p'>(</span><span class='s1'>&#39;not_checked&#39;</span><span class='p'>);</span>
+			    <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;.check-box&quot;</span><span class='p'>).</span><span class='nx'>attr</span><span class='p'>(</span><span class='s1'>&#39;checked&#39;</span><span class='o'>,</span><span class='kc'>true</span><span class='p'>);</span>
+		    <span class='p'>}</span>
+		    <span class='k'>else</span>
+		    <span class='p'>{</span>
+			    <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;#check_all&quot;</span><span class='p'>).</span><span class='nx'>addClass</span><span class='p'>(</span><span class='s1'>&#39;not_checked&#39;</span><span class='p'>);</span>
+			    <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;.check-box&quot;</span><span class='p'>).</span><span class='nx'>attr</span><span class='p'>(</span><span class='s1'>&#39;checked&#39;</span><span class='o'>,</span><span class='kc'>false</span><span class='p'>);</span>
+		    <span class='p'>}</span>
+	  <span class='p'>});</span>
+    <span class='nt'>&lt;/script&gt;</span>
+  <span class='nt'>&lt;/head&gt;</span>
+  <span class='nt'>&lt;body&gt;</span>
+    <span class='nt'>&lt;table&gt;</span>
+      <span class='nt'>&lt;tr&gt;</span>
+        <span class='nt'>&lt;td&gt;</span>Select/Deselect<span class='nt'>&lt;/td&gt;</span>
+        <span class='nt'>&lt;td&gt;&lt;input</span> <span class='na'>type=</span><span class='s'>&quot;checkbox&quot;</span> <span class='na'>class=</span><span class='s'>&quot;check-box not_checked&quot;</span> <span class='na'>id=</span><span class='s'>&quot;check_all&quot;</span><span class='nt'>&gt;&lt;/td&gt;</span>
+      <span class='nt'>&lt;/tr&gt;</span>
+      <span class='nt'>&lt;tr&gt;</span>
+        <span class='nt'>&lt;td&gt;</span>First<span class='nt'>&lt;/td&gt;</span>
+        <span class='nt'>&lt;td&gt;&lt;input</span> <span class='na'>type=</span><span class='s'>&quot;checkbox&quot;</span> <span class='na'>class=</span><span class='s'>&quot;check-box&quot;</span> <span class='na'>id=</span><span class='s'>&quot;check_box2&quot;</span><span class='nt'>&gt;&lt;/td&gt;</span>
+      <span class='nt'>&lt;/tr&gt;</span>
+      <span class='nt'>&lt;tr&gt;</span>
+        <span class='nt'>&lt;td&gt;</span>Second<span class='nt'>&lt;/td&gt;</span>
+        <span class='nt'>&lt;td&gt;&lt;input</span> <span class='na'>type=</span><span class='s'>&quot;checkbox&quot;</span> <span class='na'>class=</span><span class='s'>&quot;check-box&quot;</span> <span class='na'>id=</span><span class='s'>&quot;check_box3&quot;</span><span class='nt'>&gt;&lt;/td&gt;</span>
+       <span class='nt'>&lt;/tr&gt;</span>
+       <span class='nt'>&lt;tr&gt;</span>
+         <span class='nt'>&lt;td&gt;</span>Third<span class='nt'>&lt;/td&gt;</span>
+         <span class='nt'>&lt;td&gt;&lt;input</span> <span class='na'>type=</span><span class='s'>&quot;checkbox&quot;</span> <span class='na'>class=</span><span class='s'>&quot;check-box&quot;</span> <span class='na'>id=</span><span class='s'>&quot;check_box4&quot;</span><span class='nt'>&gt;&lt;/td&gt;</span>
+      <span class='nt'>&lt;/tr&gt;</span>
+    <span class='nt'>&lt;/table&gt;</span>
+  <span class='nt'>&lt;/body&gt;</span>
+<span class='nt'>&lt;/html&gt;</span>
+</pre>
+</div><br />
+<p>In this setting checked attribute true/false alternatively by clicking on select/deselect for alternate removing and adding class not_checked depending upon that we are setting true and false</p>
+<br />
+        </div>
+        <div class="grid_4">
+            SIDEBAR TEMPLATE
+        </div>
+
+        <div class="clear"></div>
+        <div class="push"></div>
+
+        <div class="clear"></div>
+    </div>
+
+    <div class="clear"></div>
+</div>
+<div class="clear"></div>
+<div  class="container_16">
+    <div id="footer">
+        <p class="copytight">&copy; 2010 <a href="http://raistech.com">Amar Daxini</a></p>
+
+
+    </div>
+</div>
+</body>
+</html>

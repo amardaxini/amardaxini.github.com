@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="/stylesheets/reset.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/grid.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/syntax.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+    <title>Multiple database in rails - Amar Daxini blog</title>
+
+</head>
+<body>
+<div class="container_16 every-thing">
+    <div class="header">
+        <div class="grid_16">
+            <div class="login-bar-left"><h1>Amar Daxini</h1></div>
+        </div>
+    </div>
+
+    <div class="main-nav">
+        <ul>
+            <li><a title="Blog" href="/posts.html">Blog</a></li>
+            <li><a title="About" href="/aboutme.html">About</a></li>
+        </ul>
+    </div>
+
+    <div id="wrapper">
+        <div id="content" class="grid_12">
+            <h1 class='page-title'>Multiple database in rails</h1><span class='author'>Author :- Amar Daxini </span><br /><hr />
+<p>In normal rails application contain one database,but if we want rails application having more than one database that is multiple data base.<br /> we can achieve this using multiple way.one of the way is i am showing here.it&#8217;s just 3 steps. <br /></p>
+
+<p>Lets take an e.g Project has many milestone and milestone has many task <br /> In normal scenario model looks like following way <br /></p>
+<div class='highlight'><pre><span class='k'>class</span> <span class='nc'>Project</span> <span class='o'>&lt;</span> <span class='no'>ActiveRecord</span><span class='o'>::</span><span class='no'>Base</span>
+  <span class='n'>has_many</span> <span class='ss'>:milestones</span>
+<span class='k'>end</span>
+
+<span class='k'>class</span> <span class='nc'>Milestone</span> <span class='o'>&lt;</span> <span class='no'>ActiveRecord</span><span class='o'>::</span><span class='no'>Base</span>
+    <span class='n'>has_many</span> <span class='ss'>:tasks</span>
+    <span class='n'>belongs_to</span> <span class='ss'>:project</span>
+<span class='k'>end</span>
+
+<span class='k'>class</span> <span class='nc'>Task</span> <span class='o'>&lt;</span> <span class='no'>ActiveRecord</span><span class='o'>::</span><span class='no'>Base</span>
+  <span class='n'>belongs_to</span> <span class='ss'>:milestone</span>
+<span class='k'>end</span>
+
+  
+</pre>
+</div><br />
+<p>Now we want that milestone is stored on milestone_db database and task on task_db database<br /> <img class='alignnone size-full wp-image-9' title='Rails multiple database' src='/images/posts/multipledatabase.png' height='290' alt='Rails multiple database' width='462' /> Now to achieve this we have to do the following steps<br /></p>
+
+<p>1 Edit Database.yml</p>
+<div class='highlight'><pre>    <span class='l-Scalar-Plain'>milestone_dev</span><span class='p-Indicator'>:</span>
+     <span class='l-Scalar-Plain'>reconnect</span><span class='p-Indicator'>:</span> <span class='l-Scalar-Plain'>false</span>
+     <span class='l-Scalar-Plain'>encoding</span><span class='p-Indicator'>:</span> <span class='l-Scalar-Plain'>utf8</span>
+     <span class='l-Scalar-Plain'>username</span><span class='p-Indicator'>:</span> <span class='l-Scalar-Plain'>&lt;user_name&gt;</span>
+     <span class='l-Scalar-Plain'>adapter</span><span class='p-Indicator'>:</span> <span class='l-Scalar-Plain'>mysql</span>
+     <span class='l-Scalar-Plain'>database</span><span class='p-Indicator'>:</span> <span class='l-Scalar-Plain'>milestone_db</span>
+     <span class='l-Scalar-Plain'>pool</span><span class='p-Indicator'>:</span> <span class='l-Scalar-Plain'>5</span>
+     <span class='l-Scalar-Plain'>password</span><span class='p-Indicator'>:</span> <span class='l-Scalar-Plain'>&lt;password&gt;</span>
+
+    <span class='l-Scalar-Plain'>task_dev</span><span class='p-Indicator'>:</span>
+     <span class='l-Scalar-Plain'>reconnect</span><span class='p-Indicator'>:</span> <span class='l-Scalar-Plain'>false</span>
+     <span class='l-Scalar-Plain'>encoding</span><span class='p-Indicator'>:</span> <span class='l-Scalar-Plain'>utf8</span>
+     <span class='l-Scalar-Plain'>username</span><span class='p-Indicator'>:</span> <span class='l-Scalar-Plain'>&lt;user_name&gt;</span>
+     <span class='l-Scalar-Plain'>adapter</span><span class='p-Indicator'>:</span> <span class='l-Scalar-Plain'>mysql</span>
+     <span class='l-Scalar-Plain'>database</span><span class='p-Indicator'>:</span> <span class='l-Scalar-Plain'>task_db</span>
+     <span class='l-Scalar-Plain'>pool</span><span class='p-Indicator'>:</span> <span class='l-Scalar-Plain'>5</span>
+     <span class='l-Scalar-Plain'>password</span><span class='p-Indicator'>:</span> <span class='l-Scalar-Plain'>&lt;password&gt;</span>
+   
+</pre>
+</div><br />
+<p>2 Edit milestone.rb and task.rb</p>
+<div class='highlight'><pre><span class='k'>class</span> <span class='nc'>Milestone</span> <span class='o'>&lt;</span> <span class='no'>ActiveRecord</span><span class='o'>::</span><span class='no'>Base</span>
+  <span class='c1'>#add this line to use milestone_db</span>
+  <span class='nb'>self</span><span class='o'>.</span><span class='n'>establish_connection</span> <span class='ss'>:milestone_dev</span>
+  <span class='n'>has_many</span> <span class='ss'>:tasks</span>
+  <span class='n'>belongs_to</span> <span class='ss'>:project</span>
+<span class='k'>end</span>
+
+<span class='k'>class</span> <span class='nc'>Task</span> <span class='o'>&lt;</span> <span class='no'>ActiveRecord</span><span class='o'>::</span><span class='no'>Base</span>
+  <span class='c1'>#add this line to use task_db</span>
+  <span class='n'>set_table_name</span> <span class='s2'>&quot;tasks&quot;</span>
+  <span class='n'>belongs_to</span> <span class='ss'>:milestone</span>
+<span class='k'>end</span>
+ 
+</pre>
+</div><br />
+<p>3 After editing model edit migration file</p>
+<div class='highlight'><pre><span class='k'>class</span> <span class='nc'>CreateMilestones</span> <span class='o'>&lt;</span> <span class='no'>ActiveRecord</span><span class='o'>::</span><span class='no'>Migration</span>
+  <span class='k'>def</span> <span class='nc'>self</span><span class='o'>.</span><span class='nf'>connection</span>
+    <span class='no'>Milestone</span><span class='o'>.</span><span class='n'>connection</span>
+  <span class='k'>end</span>
+ <span class='o'>.</span><span class='n'>.</span><span class='o'>.</span><span class='n'>.</span><span class='o'>.</span>
+<span class='k'>end</span>
+ 
+</pre>
+</div><br />
+<p>Now rails application is ready with multiple database.</p>
+        </div>
+        <div class="grid_4">
+            SIDEBAR TEMPLATE
+        </div>
+
+        <div class="clear"></div>
+        <div class="push"></div>
+
+        <div class="clear"></div>
+    </div>
+
+    <div class="clear"></div>
+</div>
+<div class="clear"></div>
+<div  class="container_16">
+    <div id="footer">
+        <p class="copytight">&copy; 2010 <a href="http://raistech.com">Amar Daxini</a></p>
+
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!-- 		@page { margin: 2cm } 		P { margin-bottom: 0.21cm } 		A:link { so-language: zxx } --> <!-- 		@page { margin: 2cm } 		P { margin-bottom: 0.21cm } 		A:link { so-language: zxx } --><p style='margin-bottom: 0cm;'><span style='font-size: medium;'><span style='color: #003366;'><span style='color: #99cc00;'>Observer</span> </span>classes respond to lifecycle callbacks to implement trigger-like behavior outside the original class. This is a great way to reduce the clutter that normally comes when the model class is burdened with functionality that doesn‘t pertain to the core responsibility of the class.</span></p><p style='margin-bottom: 0cm;'><span style='font-size: medium;'>
+</span></p><span style='font-size: medium;'>In my project,I have to track certain action (create and update) of user on particular model basically i am maintaining some kind of log, or audit trails.In my application eventlog model has attribute user and body.</span><p style='margin-bottom: 0cm;'><span style='font-size: medium;'>
+</span></p><!-- 		@page { margin: 2cm } 		P { margin-bottom: 0.21cm } --><pre>class EventlogObserver &lt; ActiveRecord::Observer
+  observe :model1, :model2
+
+  def after_create(record)
+    @eventlog = Eventlog.new
+    @eventlog.body = record.class.to_S+“Created at”+Time.now
+    @eventlog.save
+    @event
+  end</pre><pre>  def after_update(record)
+    @eventlog = Eventlog.new
+    @eventlog.body = record.class.to_S+“Updated at”+Time.now
+    @eventlog.save
+  end
+end
+
+<!-- 		@page { margin: 2cm } 		P { margin-bottom: 0.21cm } --></pre><!-- 		@page { margin: 2cm } 		P { margin-bottom: 0.21cm } --><p style='margin-bottom: 0.5cm;'><span style='font-size: medium;'>This eventlog_observer.rb is stored in app/model</span></p><p style='margin-bottom: 0.5cm;'><span style='font-size: medium;'>Now Configuration</span> <span style='font-size: medium;'>add following line in /config/environment.rb</span> <span style='font-size: medium;'>config.active_record.observers = :eventlog_observer</span></p><p style='margin-bottom: 0.5cm;'><span style='font-size: medium;'>In rails there are various callbacks on which you trigger some common behaviour</span></p><ul>
+	<li><span style='font-size: medium;'> </span> <span style='font-size: medium;'>after_create</span></li>
+	<li><span style='font-size: medium;'>after_update</span></li>
+	<li><span style='font-size: medium;'>after_save</span></li>
+	<li><span style='font-size: medium;'>after_destroy</span></li>
+	<li><span style='font-size: medium;'>before_create</span></li>
+	<li><span style='font-size: medium;'>before_update</span></li>
+	<li><span style='font-size: medium;'>before_save</span></li>
+	<li><span style='font-size: medium;'>before_destroy</span></li>
+</ul><p style='margin-bottom: 0.5cm;'><span style='font-size: medium;'>and many more you can also refer from </span><a href='http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html'>http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html</a></p><p style='margin-bottom: 0.5cm;'><span style='font-size: medium;'>For further reference </span><a href='http://api.rubyonrails.org/classes/ActiveRecord/Observer.html'>http://api.rubyonrails.org/classes/ActiveRecord/Observer.html</a></p><p style='margin-bottom: 0cm;' /><pre><span style='font-size: medium;'> </span></pre>

@@ -1,0 +1,63 @@
+<p>There are various ways to improve <strong>"java"</strong> performance.One of the way is use of<a href='http://martiansoftware.com/nailgun/' title='Nailgun intro railstech.com' target='_blank'><strong> Nailgun</strong>.</a></p>
+<strong>Nailgun</strong>
+<p>It means when <strong>java</strong> is called every time <strong>JVM </strong>is loaded so execution time of any application increases due to<strong> JVM startup time</strong>.To overcome this we have to write java application that listen to particular address and port so each time JVM is not loaded and application can listen on that port and gives expected result. <strong>Nailgun</strong> help us to achieve this.<!--more--> <h2>Download Nailgun Package</h2> You can download nailgun from <a href='http://sourceforge.net/projects/nailgun/files/' title='Nailgun download railstech.com' target='_blank'>sourceforge</a>.Download nailgun src/zip package which containing nailgun-VERSION.jar.</p>
+
+<p>If it is <strong>linux</strong> operating system you can do &#8221;<strong>make</strong>&#8221; which gives <strong>ng binary</strong>.</p>
+
+<p>If possible put <strong>ng binary</strong> into your <strong>system path</strong>.</p>
+
+<p>After Download do following steps: <h2>Start Nailgun Server</h2> <ul>
+	<li>Set <strong>classpath</strong> environment variable if not set</li>
+	<li><strong>Copy nailgun-VERSION.jar to JAVA_HOME/lib directory.</strong></li>
+	<li>Now to <strong>start nailgun server</strong></li>
+</ul> <span>code lang=&#8221;java&#8221;</span></p>
+
+<p>java -server com.martiansoftware.nailgun.NGServer</p>
+
+<p><span>/code</span></p>
+
+<p>OR</p>
+
+<p>we can start nailgun without copying into lib folder of JAVA_HOME</p>
+
+<p><span>code lang=&#8221;java&#8221;</span></p>
+
+<p>java -jar /your/path/to/nailgun-VESION.jar</p>
+
+<p><span>/code</span></p>
+
+<p>We can start server with different address <strong>"--nailgun-server address"</strong> and different port <strong>"--nailgun-port port no"</strong> by passing to above command as a parameter.</p>
+
+<p>By default server address is <strong>"127.0.0.1"</strong> and port no is <strong>"2113"</strong></p>
+
+<p><span>code lang=&#8221;java&#8221;</span></p>
+
+<p>java -jar /your/path/to/nailgun-VESION.jar 127.0.1.1:2313</p>
+
+<p><span>/code</span> <h2>Start Application With Nailgun</h2> There are various ways to configure application with <strong>nailgun</strong>.</p>
+
+<p><span>code lang=&#8221;java&#8221;</span>ng ng-cp<span>/code</span></p>
+<strong> </strong>
+<p><span>code lang=&#8221;java&#8221;</span>ng ng-cp path/javaclass<span>/code</span></p>
+
+<p>Above command <strong>add javaclass to nailgun environment</strong>.</p>
+
+<p>If <strong>javaclass</strong> containing main then it works fine. Path should be absolute to execute application absolute path is required which can be reduced by creationg alias of that class.</p>
+
+<p><span>code lang=&#8221;java&#8221;</span>ng ng-alias<span>/code</span></p>
+<strong> </strong>
+<p>Displays all the <strong>alias</strong> present in nailgun.</p>
+
+<p><span>code lang=&#8221;java&#8221;</span>ng ng-alias alias name class name<span>/code</span></p>
+
+<p>It will add <strong>alias name for class name</strong> so on executing we just call with alias name.</p>
+<strong>Run Application</strong>
+<p><span>code lang=&#8221;java&#8221;</span>ng alias name or classname <span>command line arguments</span></p>
+<strong>Stop Nailgun server</strong>
+<p><span>code lang=&#8221;java&#8221;</span> ng ng-stop <span>&#8211;server-port 2313 &#8211;server-address 127.0.0.1</span> <span>/code</span> <h2>Tips :</h2> If application containing dependent jar file which is not in JAVA_HOME/lib you can add those jar file by using following command.</p>
+
+<p><span>code lang=&#8221;java&#8221;</span>ng ng-cp /absolute_jar_path/mainclass<span>/code</span></p>
+
+<p>If <strong>jar</strong> file does <strong>not containg main</strong> class then we have to add those jar file on classpath so when nailgun server start those jar file already in class path.As per my opinion is <strong>create one jar for application</strong>,that helps us  to run application easily and no need to include multiple jar file individually .You can combine your application and dependent jar in one jar using <strong><a href='http://java.sun.com/developer/technicalArticles/java_warehouse/single_jar/' title='Creating one jar using netbeans railstech.com ' target='_blank'>Netbeans</a></strong>.</p>
+
+<p>More info related to nailgun you can found <a href='http://martiansoftware.com/nailgun' title='Nailgun Basics railstech.com' target='_blank'>here</a>.</p>

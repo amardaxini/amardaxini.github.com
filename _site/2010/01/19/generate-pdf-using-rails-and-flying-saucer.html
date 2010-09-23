@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="/stylesheets/reset.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/grid.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/syntax.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+    <title>Generate PDF Using Rails and Flying Saucer - Amar Daxini blog</title>
+
+</head>
+<body>
+<div class="container_16 every-thing">
+    <div class="header">
+        <div class="grid_16">
+            <div class="login-bar-left"><h1>Amar Daxini</h1></div>
+        </div>
+    </div>
+
+    <div class="main-nav">
+        <ul>
+            <li><a title="Blog" href="/posts.html">Blog</a></li>
+            <li><a title="About" href="/aboutme.html">About</a></li>
+        </ul>
+    </div>
+
+    <div id="wrapper">
+        <div id="content" class="grid_12">
+            <h1 class='page-title'>Generate PDF Using Rails and Flying Saucer</h1><span class='author'>Author :- Amar Daxini </span><br /><hr /><h2>Rails Pdf Plugin act_as_flying_saucer</h2>
+<p>There are various ways to generate pdf documents in any language.In Rails we can use prawn library ,HtmlDoc,PrinceXml and many other library,using their api we can generate pdf document.Basically the primary goal is converting HTML web pages to PDF Document,without much changing existing CSS and HTML.</p>
+<br />
+<p>Using the<a href='https://xhtmlrenderer.dev.java.net/' target='_blank'> Flying Saucer Project</a> we can achieve this.we can convert HTML + CSS to PDF documents without much changing HTML and CSS. It also support CSS 2 and many properties of CSS 3 for printing Header,Footer,Page Number,Paginated Tables and many more.This Project is built on Java so Java is required on system.</p>
+<br />
+<p>Lets Start How to generate PDF Using Flying Saucer.</p>
+<br /><div class='highlight'><pre> <span class='n'>script</span><span class='o'>/</span><span class='n'>plugin</span> <span class='n'>install</span> <span class='n'>git</span><span class='ss'>:/</span><span class='o'>/</span><span class='n'>github</span><span class='o'>.</span><span class='n'>com</span><span class='o'>/</span><span class='n'>amardaxini</span><span class='o'>/</span><span class='n'>acts_as_flying_saucer</span><span class='o'>.</span><span class='n'>git</span>
+</pre>
+</div><br />
+<p>This Plugin forked From</p>
+<div class='highlight'><pre>http://github.com/dagi3d/acts_as_flying_saucer
+</pre>
+</div>
+<p>Which has older version of flying saucer project.</p>
+<br />
+<p>Next Step after installing plugin add <strong>flying_saucer.rb </strong> file at <strong>config/initializers</strong>.</p>
+<br /><div class='highlight'><pre><span class='no'>ActsAsFlyingSaucer</span><span class='o'>::</span><span class='no'>Config</span><span class='o'>.</span><span class='n'>options</span> <span class='o'>=</span> <span class='p'>{</span>
+<span class='ss'>:java_bin</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;/usr/bin/java&quot;</span><span class='p'>,</span>          <span class='c1'># java binary</span>
+<span class='ss'>:classpath_separator</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;:&#39;</span><span class='p'>,</span>           <span class='c1'># classpath separator. unixes system use &#39;:&#39; and windows &#39;;&#39;</span>
+<span class='ss'>:tmp_path</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;/tmp&quot;</span>                   <span class='c1'># path where temporary files will be stored</span>
+<span class='p'>}</span>
+</pre>
+</div>
+<p>After Setting Java path , classpath separator and tmp path now do following step.</p>
+<br /><div class='highlight'><pre><span class='k'>class</span> <span class='nc'>PdfController</span> <span class='o'>&lt;</span> <span class='no'>ActionController</span><span class='o'>::</span><span class='no'>Base</span>
+  <span class='n'>acts_as_flying_saucer</span>
+
+  <span class='k'>def</span> <span class='nf'>generate_pdf</span>
+    <span class='n'>render_pdf</span> <span class='ss'>:template</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;pdf/pdf_template&#39;</span>
+  <span class='k'>end</span>
+<span class='k'>end</span>
+  <span class='n'>render_pdf</span> <span class='ss'>:file</span><span class='o'>=&gt;</span><span class='s1'>&#39;pdf/generate_pdf.html.erb&#39;</span>
+  <span class='n'>render_pdf</span> <span class='ss'>:template</span><span class='o'>=&gt;</span><span class='s1'>&#39;pdf/generate_pdf.pdf.erb&#39;</span><span class='p'>,</span>
+             <span class='ss'>:send_file</span> <span class='o'>=&gt;</span> <span class='p'>{</span> <span class='ss'>:filename</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;pdfdoc.pdf&#39;</span> <span class='p'>}</span>
+</pre>
+</div><br />
+<p>Add act_as_flying_saucer to controller then render_pdf.</p>
+
+<p>There are various ways to render pdf using &#8221;<strong>template</strong>&#8221; or &#8221;<strong>file</strong>&#8221;,<strong>:send_file</strong> option use to send pdf file to client side.if we are using any <strong>external css</strong> file then this css shoulda have <strong>medi</strong>a option as<strong> 'print'</strong>.</p>
+<br /><div class='highlight'><pre><span class='o'>&lt;</span><span class='sx'>%= stylesheet_link_tag &#39;pdf&#39; ,:media=</span><span class='o'>&gt;</span><span class='s1'>&#39;print&#39;</span> <span class='o'>%&gt;</span>
+</pre>
+</div>
+<p>If pdf containing images which generate on the fly.so instead of using</p>
+<br /><div class='highlight'><pre><span class='o'>&lt;%=</span> <span class='n'>image_tag</span> <span class='o'>%&gt;</span>
+</pre>
+</div>
+<p>use</p>
+<div class='highlight'><pre> <span class='nt'>&lt;img</span> <span class='na'>src=</span><span class='s'>&quot; &quot;</span> <span class='nt'>&gt;</span>
+</pre>
+</div>
+<p>Before rendering PDF validate HTML,like whether all tags are close properly or not.otherwise it gives an parse error.</p>
+<br />
+<p>Now You are ready to Generate PDF. Hurray!!!!!!!!!</p>
+<br />
+<p>How to generate Header, Footer,Page Number and Automation Of HTML Validation will be discussed in next post.</p>
+<br />
+        </div>
+        <div class="grid_4">
+            SIDEBAR TEMPLATE
+        </div>
+
+        <div class="clear"></div>
+        <div class="push"></div>
+
+        <div class="clear"></div>
+    </div>
+
+    <div class="clear"></div>
+</div>
+<div class="clear"></div>
+<div  class="container_16">
+    <div id="footer">
+        <p class="copytight">&copy; 2010 <a href="http://raistech.com">Amar Daxini</a></p>
+
+
+    </div>
+</div>
+</body>
+</html>

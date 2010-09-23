@@ -1,0 +1,57 @@
+<p>In many application we want to convert one office format to another office format e.g doc to PDF , doc to html etc.We can import/export document using<strong> OpenOffice</strong> easily,but this is manual way.But <strong>standalone/Web based</strong> application we have to automate this functionality.<strong> </strong><a href='http://www.artofsolving.com/opensource/jodconverter' title='JODConverter railstech.com' target='_blank'>JODConverter</a>,the Java OpenDocument Converter, It converts documents between different office formats using <strong>OpenOffice</strong>.</p>
+<strong>JODConverter</strong>
+<p>Now,JODConverter is a <strong>java</strong> library so it can be used using <strong>java</strong> application,or using <strong>command line</strong>,or by making <strong>web service</strong> so any other language(<strong>RUBY,.NET,PHP,PYTHON</strong>) can used this conversion directly. <a href='http://github.com/amardaxini/convert_office' title='convert_office http://github.com/amardaxini/convert_office railstech.com' target='_blank'>Convert Office</a> is a ruby Wrapper of <a href='http://railstech.com/'>jodconverter</a> .Which is used to convert office format to another office format. <!--more--> <h4>Requirement</h4> <ul>
+	<li><strong>JAVA</strong> to be installed in system.</li>
+	<li><strong>Open Office 2,3 </strong>or greater required</li>
+	<li>Start <strong>Open Office</strong> in <strong>headless mode</strong> using following command.</li>
+</ul> <h4>Installation</h4> <ul>
+	<li>Start <strong>Open Office</strong> in <strong>headless mode</strong> using following command.</li>
+</ul> <blockquote><strong>soffice -headless -accept="socket,host=127.0.0.1,port=8100;urp;" -nofirststartwizard</strong></blockquote> <ul>
+	<li><strong>Install</strong> <a href='http://github.com/amardaxini/convert_office' title='convert_office http://github.com/amardaxini/convert_office railstech.com' target='_blank'>convert_office</a> <strong>plugin.</strong></li>
+</ul> <span>code lang=&#8221;ruby&#8221;</span> ruby script/plugin install git://github.com/amardaxini/convert_office.git <span>/code</span> <ul>
+	<li><strong>Configuration</strong></li>
+</ul> Create configuration file convert_office.rb placed in a config/initializers/convert_office.rb</p>
+
+<dl>
+<dt><span>code lang=&#8221;ruby&#8221;</span></dt>
+
+<dt>ConvertOffice::ConvertOfficeConfig.options = {</dt>
+
+<dd>java_bin =&#62; &#34;java&#34;, # java binary path</dd>
+
+<dd>nailgun =&#62;false, # for nailgun support</dd>
+
+<dd>soffice_port=&#62;8100 # Open office port no }</dd>
+</dl>
+
+<p><span>/code</span> <h4>Document is converted using destination file name</h4> <span>code lang=&#8221;ruby&#8221;</span> ConvertOffice::ConvertOfficeFormat.new.convert(src path,dest path) <span>/code</span></p>
+
+<p>Above methods take src path which is src file,and dest path which is converted document path. dest path contains file name with valid format extension.To know valid format is discuss later in this article.</p>
+
+<p>e.g converting <strong>test.doc</strong> into <strong>converted.pdf</strong> <h4>Document is converted using format</h4> <span>code lang=&#8221;ruby&#8221;</span> ConvertOffice::ConvertOfficeFormat.new.convert(&#34;test.doc&#34;,&#34;converted.pdf&#34;) <span>/code</span></p>
+
+<p>If destination file name is same as source file name except format.To do this Pass (<strong>src path,"",valid format parameter)</strong></p>
+
+<p><span>code lang=&#8221;ruby&#8221;</span> ConvertOffice::ConvertOfficeFormat.new.convert(src_file,&#34;&#34;,format) <span>/code</span></p>
+
+<p>eg.converting <strong>test.doc</strong> to <strong>test.html</strong></p>
+
+<p><span>code lang=&#8221;ruby&#8221;</span> ConvertOffice::ConvertOfficeFormat.new.convert(&#34;test.doc&#34;,&#34;&#34;,&#34;html&#34;) <span>/code</span> <h4>Valid Format</h4> Following<strong> methods </strong>display valid format <ul>
+	<li>By default it displays all valid format that are available</li>
+	<li>By passing file name it will displays valid conversion format</li>
+	<li>By passing format it will displays valid conversion format</li>
+</ul> <span>code lang=&#8221;ruby&#8221;</span> ConvertOffice::ConvertOfficeFormat.display_valid_format ConvertOffice::ConvertOfficeFormat.display_valid_format(input file name) ConvertOffice::ConvertOfficeFormat.display_valid_format(format) <span>/code</span></p>
+
+<p>convert_office also support for <strong>nailgun.</strong></p>
+
+<p>To speed up conversion speed we can use nailgun.In previous <a href='http://railstech.com/?p=212' title='Nailgun using ruby railstech.com' target='_blank'>article</a> i have shown how to start with nailgun and its basics.</p>
+
+<p>After setting up <a href='http://railstech.com/?p=212' title='Nailgun using ruby railstech.com' target='_blank'>nailgun</a> do following steps.</p>
+
+<p><span>code lang=&#8221;ruby&#8221;</span> rake convert_office script/convert_office_nailgun <span>/code</span></p>
+
+<p>Now you are ready with <strong>nailgun</strong>.</p>
+
+<p>If you have any issue you can mail me amardaxini<span>at</span>gmail<span>dot</span>com</p>
+<strong>
+</strong>

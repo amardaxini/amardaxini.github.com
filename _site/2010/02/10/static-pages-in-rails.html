@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="/stylesheets/reset.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/grid.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/syntax.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+    <title>Static pages in rails - Amar Daxini blog</title>
+
+</head>
+<body>
+<div class="container_16 every-thing">
+    <div class="header">
+        <div class="grid_16">
+            <div class="login-bar-left"><h1>Amar Daxini</h1></div>
+        </div>
+    </div>
+
+    <div class="main-nav">
+        <ul>
+            <li><a title="Blog" href="/posts.html">Blog</a></li>
+            <li><a title="About" href="/aboutme.html">About</a></li>
+        </ul>
+    </div>
+
+    <div id="wrapper">
+        <div id="content" class="grid_12">
+            <h1 class='page-title'>Static pages in rails</h1><span class='author'>Author :- Amar Daxini </span><br /><hr /><h2>Static site using rails</h2>
+<p>As we know rails is mainly used for <strong>dynamic website</strong>.we can also display <strong>static web pages</strong> or we can deploy full <strong>static website</strong> using <strong>rails</strong>. The following code can help us to display static pages.</p>
+<br /><h3>Step 1:-Create Rails project</h3><div class='highlight'><pre><span class='n'>rails</span> <span class='n'>static_site</span>
+</pre>
+</div><br /><h3>Step 2:-Generate StaticPage Controller</h3><div class='highlight'><pre>  <span class='n'>ruby</span> <span class='n'>script</span><span class='o'>/</span><span class='n'>generate</span> <span class='n'>controller</span> <span class='n'>static_pages</span> <span class='n'>page</span>
+</pre>
+</div><br /><h3>Step 3:- Create StaticPage Class in Model</h3><div class='highlight'><pre> <span class='k'>class</span> <span class='nc'>StaticPage</span>
+   <span class='no'>Formats</span> <span class='o'>=</span> <span class='p'>{</span>
+       <span class='s2'>&quot;html&quot;</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;text/html&quot;</span><span class='p'>,</span>
+       <span class='s2'>&quot;png&quot;</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;image/png&quot;</span><span class='p'>,</span>
+       <span class='s2'>&quot;jpg&quot;</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;image/jpg&quot;</span>
+     <span class='p'>}</span>
+ <span class='k'>end</span>
+</pre>
+</div><br /><h3>Step 4:- Add following line in routes.rb</h3><div class='highlight'><pre><span class='n'>map</span><span class='o'>.</span><span class='n'>page</span> <span class='s2'>&quot;page/:filename.:format&quot;</span><span class='p'>,</span> <span class='ss'>:controller</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;static_pages&#39;</span><span class='p'>,</span> <span class='ss'>:action</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;page&#39;</span>
+</pre>
+</div><br />
+<p>Here we are passing filename as parameter which is static file name.</p>
+
+<p>This will generate <strong>url</strong> as<strong> http://sitename/page/static_filename.html</strong></p>
+<br /><h3>Step 5:- Now add following line into static_pages controller</h3><div class='highlight'><pre><span class='k'>def</span> <span class='nf'>page</span>
+ <span class='n'>send_file</span>
+ <span class='s2'>&quot;</span><span class='si'>#{</span><span class='no'>Rails</span><span class='o'>.</span><span class='n'>root</span><span class='si'>}</span><span class='s2'>/app/views/static_pages/</span><span class='si'>#{</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:filename</span><span class='o'>]</span><span class='si'>}</span><span class='s2'>.</span><span class='si'>#{</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:format</span><span class='o'>]</span><span class='si'>}</span><span class='s2'>&quot;</span><span class='p'>,</span><span class='ss'>:disposition</span> <span class='o'>=&gt;</span><span class='s1'>&#39;inline&#39;</span><span class='p'>,</span><span class='ss'>:type</span> <span class='o'>=&gt;</span> <span class='no'>StaticPage</span><span class='o'>::</span><span class='no'>Formats</span><span class='o'>[</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:format</span><span class='o'>]]</span>
+ <span class='k'>end</span>
+</pre>
+</div><br /><h3>Step 6:- All the static pages place in RAILS_ROOT/app/views/static_pages/ folder</h3><br /><h3>Step 7 :- Start server and Type url as shown below.</h3><div class='highlight'><pre><span class='n'>ruby</span> <span class='n'>script</span><span class='o'>/</span><span class='n'>server</span>
+</pre>
+</div><br />
+<p>Url may be</p>
+<strong><a href='http://railstech.com/?page_id=2'> http://railstech.com/page/contactus.html</a></strong><br /><strong><a href='http://railstech.com'>http://railstech.com/page/faq.html</a> </strong><br />
+        </div>
+        <div class="grid_4">
+            SIDEBAR TEMPLATE
+        </div>
+
+        <div class="clear"></div>
+        <div class="push"></div>
+
+        <div class="clear"></div>
+    </div>
+
+    <div class="clear"></div>
+</div>
+<div class="clear"></div>
+<div  class="container_16">
+    <div id="footer">
+        <p class="copytight">&copy; 2010 <a href="http://raistech.com">Amar Daxini</a></p>
+
+
+    </div>
+</div>
+</body>
+</html>

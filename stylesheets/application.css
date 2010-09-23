@@ -227,16 +227,13 @@ div#content form.data-form input[type=submit]:active {
     background-color: #EEE;
 }
 
-ul.photo-list{
-    margin: 0;
-    padding: 0 0 0 30px;
-    list-style: none;
+.entry {
+	padding: 15px 0 5px;
+	clear: both;
+	font-size: 14px;
+	line-height: 1.1em;
 }
-ul.photo-list li {
-    padding: 0px;
-    margin: 0px;
-    display: inline;
-}
+
 
 /* footer*/
 {
@@ -251,11 +248,7 @@ div.every-thing {
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    /*    -webkit-box-shadow: 8px 0px 10px #000,-8px 0px 10px #000;
--moz-box-shadow: 8px 0px 10px #000,-8px 0px 10px #000;
-box-shadow: 8px 0px 10px #000,-8px 0px 10px #000;*/
-    margin: 0 auto -30px; /* the bottom margin is the negative value of the footer's height */
-    background-color:white;
+     background-color:white;
 
 
 }
